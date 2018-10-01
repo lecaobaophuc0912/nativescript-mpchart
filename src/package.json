@@ -1,0 +1,70 @@
+{
+    "name": "nativescript-mpchart",
+    "version": "1.0.2",
+    "description": "NativeScript Range Seek Bar widget",
+    "main": "nativescript-mpchart",
+    "typings": "index.d.ts",
+    "nativescript": {
+        "platforms": {
+            "android": "4.1.2",
+            "ios": "4.1.0"
+        }
+    },
+    "scripts": {
+        "tsc": "tsc -skipLibCheck",
+        "build": "npm i && tsc && ngc",
+        "postclone": "npm i && node scripts/postclone.js && cd ../demo && npm i && cd ../src && npm run plugin.link",
+        "test.android": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build android && tns test android --justlaunch",
+        "test.ios": "npm i && npm run tsc && npm run tslint && cd ../demo && tns build ios && tns test ios --justlaunch",
+        "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
+        "plugin.link": "npm link && cd ../demo && npm link nativescript-auto-complete-text-field && cd ../src",
+        "plugin.tscwatch": "npm run tsc -- -w",
+        "demo.ios": "npm i && npm run tsc && cd ../demo && tns run ios --syncAllFiles",
+        "demo.android": "npm i && npm run tsc && cd ../demo && tns run android --syncAllFiles",
+        "demo.ios.ng": "npm i && npm run tsc && cd ../demo-ng && tns run ios --syncAllFiles",
+        "demo.android.ng": "npm i && npm run tsc && cd ../demo-ng && tns run android --syncAllFiles",
+        "demo.reset": "cd ../demo && rimraf platforms",
+        "plugin.prepare": "npm run tsc && cd ../demo && tns plugin remove nativescript-auto-complete-text-field && tns plugin add ../src",
+        "clean": "cd ../demo && rimraf hooks node_modules platforms && cd ../src && rimraf node_modules && npm run plugin.link",
+        "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**'",
+        "prepare": "node scripts/prepare.js",
+        "ngc": "ngc --project tsconfig.aot.json",
+        "generate.declaration.ios": "cd ../demo-ng && TNS_TYPESCRIPT_DECLARATIONS_PATH=\"$(pwd)/typings\" tns build ios"
+    },
+    "keywords": [
+        "NativeScript",
+        "JavaScript",
+        "Android",
+        "iOS"
+    ],
+    "author": {
+        "name": "JK",
+        "email": "lexuanhoang2506@gmail.com"
+    },
+    "bugs": {
+        "url": "https://github.com/HoangJK/nativescript-range-seek-bar/issues"
+    },
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/HoangJK/nativescript-range-seek-bar",
+    "readmeFilename": "README.md",
+    "devDependencies": {
+        "tns-core-modules": "4.1.0",
+        "tns-platform-declarations": "4.1.0",
+        "typescript": "~2.7.2",
+        "nativescript-angular": "~5.2.0",
+        "@angular/animations": "~5.2.0",
+        "@angular/common": "~5.2.0",
+        "@angular/compiler": "~5.2.0",
+        "@angular/core": "~5.2.0",
+        "@angular/forms": "~5.2.0",
+        "@angular/http": "~5.2.0",
+        "@angular/platform-browser": "~5.2.0",
+        "@angular/platform-browser-dynamic": "~5.2.0",
+        "@angular/router": "~5.2.0",
+        "@angular/compiler-cli": "~5.2.0",
+        "rxjs": "~5.5.5",
+        "zone.js": "~0.8.4",
+        "tslint": "~5.4.3"
+    },
+    "bootstrapper": "nativescript-plugin-seed"
+}
