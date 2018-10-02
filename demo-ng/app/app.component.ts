@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { RangeSeekBarEventData } from "nativescript-mpchart";
 
 @Component({
     selector: "ns-app",
@@ -19,12 +18,12 @@ export class AppComponent {
 
     constructor() { }
 
-    rangeSeekBarChanged(event: RangeSeekBarEventData) {
-        console.log("rangeSeekBarChanged: ", event.value);
+    ngOnInit() {
+        console.log("ngOnInit");
     }
 
-    rangeSeekBarFinalValue(event: RangeSeekBarEventData) {
-        console.log("rangeSeekBarFinalValue: ", event.value);
+    onTap(args) {
+        console.log("onTap");
     }
 
 }
