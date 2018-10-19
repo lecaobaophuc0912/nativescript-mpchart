@@ -1,1 +1,1 @@
-export * from "./range-seek-bar.module";
+export * from "./mpchart.module";

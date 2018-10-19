@@ -1,5 +1,6 @@
-import { RangeSeekBarBase } from "./nativescript-mpchart.common";
-export declare class MPLineChart extends RangeSeekBarBase {
-    nativeView: com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
-    createNativeView(): com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import { MPChartBase } from "./nativescript-mpchart.common";
+export declare class MPLineChart extends MPChartBase {
+    nativeView: any;
+    createNativeView(): any;
+    resetZoomLineChart();
 }

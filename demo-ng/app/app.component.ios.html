@@ -2,6 +2,13 @@
 </ActionBar>
 <StackLayout>
     <Button text="onClick" (tap)="onTap($event)"></Button>
-    
-    <RangeSeekBar></RangeSeekBar>
+    <Button text="setDefault" (tap)="onTapDefault($event)"></Button>
+    <StackLayout height="500">
+        <MPLineChart *ngIf="dataSet" #lineChart [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
+            [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset"
+            [descriptionTextColor]="setUp.descriptionTextColor" [highlightPerTapEnabled]="setUp.highlightPerTapEnabled" [highlightPerDragEnabled]="setUp.highlightPerDragEnabled"
+            [xAxisGranularity]="setUp.xAxisGranularityProperty" [yAxisGranularity]="setUp.yAxisGranularityProperty" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
+            [items]="dataSet" [labels]="labels" class="mp-chart"></MPLineChart>
+    </StackLayout>
+
 </StackLayout>

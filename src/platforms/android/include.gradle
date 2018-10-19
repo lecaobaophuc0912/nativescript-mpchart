@@ -1,11 +1,19 @@
 /* Include.gradle configuration: http://docs.nativescript.org/plugins/plugins#includegradle-specification */
 
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url "https://maven.google.com" }
+        
 
+    }
+}
 android {
 	
 }
 
 dependencies {
 	// compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile "com.github.PhilJay:MPAndroidChart:v3.0.2"
+    compile "com.github.PhilJay:MPAndroidChart:v3.0.3"
 }
