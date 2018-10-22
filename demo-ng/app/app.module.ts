@@ -7,7 +7,8 @@ import { registerElement } from "nativescript-angular/element-registry";
 import { ItemService } from "./item/item.service";
 import { ItemsComponent } from "./item/items.component";
 import { ItemDetailComponent } from "./item/item-detail.component";
-import { NativeScriptMPLineChartModule } from "nativescript-mpchart/angular";
+import { MPLineChart } from "nativescript-mpchart";
+registerElement('MPLineChart', () => MPLineChart);
 @NgModule({
     bootstrap: [
         AppComponent
@@ -16,7 +17,6 @@ import { NativeScriptMPLineChartModule } from "nativescript-mpchart/angular";
         NativeScriptModule,
         NativeScriptFormsModule,
         AppRoutingModule,
-        NativeScriptMPLineChartModule
     ],
     declarations: [
         AppComponent,
