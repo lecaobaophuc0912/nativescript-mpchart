@@ -5,6 +5,6 @@ registerElement("MPLineChart", () => require("../").MPLineChart);
 @NgModule({
     schemas: [NO_ERRORS_SCHEMA],
 })
-export class NativeScriptUIRangeSeekBarModule {
+export class NativeScriptMPLineChartModule {
 
 }
