@@ -3,6 +3,7 @@ import { Color } from "tns-core-modules/color/color";
 import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface } from "nativescript-mpchart";
 @Component({
     selector: "ns-app",
+    moduleId: module.id,
     templateUrl: "app.component.html",
 })
 
@@ -21,14 +22,6 @@ export class AppComponent {
         xAxisGranularityProperty: 1,
         yAxisGranularityProperty: 40,
         xAxisLabelPosition: "Bottom"
-    };
-    public rangeSeekBarProp = {
-        minValue: 0,
-        maxValue: 100,
-        minStartValue: 0,
-        maxStartValue: 100,
-        minRange: 0,
-        step: 1
     };
     public dataSet: Array<DataChartInterface>;
     public labels: Array<DataSetLabelInterface>;

@@ -3,12 +3,12 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { NativeScriptFormsModule } from "nativescript-angular/forms"
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
-
+import { registerElement } from "nativescript-angular/element-registry";
 import { ItemService } from "./item/item.service";
 import { ItemsComponent } from "./item/items.component";
 import { ItemDetailComponent } from "./item/item-detail.component";
-import { NativeScriptUIRangeSeekBarModule } from "nativescript-mpchart/angular";
-
+import { MPLineChart } from "nativescript-mpchart";
+registerElement("MPLineChart", () => MPLineChart);
 @NgModule({
     bootstrap: [
         AppComponent
@@ -17,7 +17,6 @@ import { NativeScriptUIRangeSeekBarModule } from "nativescript-mpchart/angular";
         NativeScriptModule,
         NativeScriptFormsModule,
         AppRoutingModule,
-        NativeScriptUIRangeSeekBarModule
     ],
     declarations: [
         AppComponent,

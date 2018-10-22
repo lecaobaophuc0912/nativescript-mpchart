@@ -1,4 +1,5 @@
-/// <reference path="android-declarations.d.ts"/>
+
+// import globalAndroid = android;
 
 declare module com {
 	export module github {
@@ -540,7 +541,7 @@ declare module com {
 		export module mikephil {
 			export module charting {
 				export module charts {
-					export abstract class Chart<T>  extends globalAndroid.view.ViewGroup implements com.github.mikephil.charting.interfaces.dataprovider.ChartInterface  {
+					export abstract class Chart<T>  extends com.github.mikephil.charting.interfaces.dataprovider.ChartInterface  {
 						public static class: java.lang.Class<com.github.mikephil.charting.charts.Chart<any>>;
 						public static LOG_TAG: string;
 						public mLogEnabled: boolean;
@@ -6268,7 +6269,7 @@ declare module com {
 		export module mikephil {
 			export module charting {
 				export module listener {
-					export abstract class ChartTouchListener<T>  extends globalAndroid.view.GestureDetector.SimpleOnGestureListener implements globalAndroid.view.View.OnTouchListener  {
+					export abstract class ChartTouchListener<T> extends globalAndroid.view.View.OnTouchListener  {
 						public static class: java.lang.Class<com.github.mikephil.charting.listener.ChartTouchListener<any>>;
 						public mLastGesture: com.github.mikephil.charting.listener.ChartTouchListener.ChartGesture;
 						public static NONE: number;
