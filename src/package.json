@@ -1,7 +1,7 @@
 {
     "name": "nativescript-mpchart",
-    "version": "1.0.2",
-    "description": "NativeScript Range Seek Bar widget",
+    "version": "1.0.0",
+    "description": "NativeScript MPChart",
     "main": "nativescript-mpchart",
     "typings": "index.d.ts",
     "nativescript": {
@@ -38,14 +38,14 @@
         "iOS"
     ],
     "author": {
-        "name": "JK",
-        "email": "lexuanhoang2506@gmail.com"
+        "name": "LeCaoPhuc",
+        "email": "lecaobaophuc@gmail.com"
     },
     "bugs": {
-        "url": "https://github.com/HoangJK/nativescript-range-seek-bar/issues"
+        "url": "https://github.com/LeCaoPhuc/nativescript-mpchart/issues"
     },
     "license": "Apache-2.0",
-    "homepage": "https://github.com/HoangJK/nativescript-range-seek-bar",
+    "homepage": "https://github.com/LeCaoPhuc/nativescript-mpchart",
     "readmeFilename": "README.md",
     "devDependencies": {
         "tns-core-modules": "4.1.0",
