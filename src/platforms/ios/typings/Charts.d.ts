@@ -334,6 +334,8 @@ declare class BarChartView extends BarLineChartViewBase implements BarChartDataP
 
 	static new(): BarChartView; // inherited from NSObject
 
+	barChartData: LineChartData;
+
 	drawBarShadowEnabled: boolean;
 
 	drawValueAboveBarEnabled: boolean;
@@ -381,6 +383,8 @@ declare class BarChartView extends BarLineChartViewBase implements BarChartDataP
 	highlightValueWithXDataSetIndexStackIndex(x: number, dataSetIndex: number, stackIndex: number): void;
 
 	isInvertedWithAxis(axis: AxisDependency): boolean;
+
+	setData(): void;
 }
 
 declare class BarLineChartViewBase extends ChartViewBase implements BarLineScatterCandleBubbleChartDataProvider, UIGestureRecognizerDelegate {
