@@ -34,37 +34,8 @@ export class MPLineChart extends MPChartBase {
     public nativeView: com.github.mikephil.charting.charts.LineChart;
     public resetZoomLineChart() {
         this.nativeView.resetZoom();
-        // return "Text";
     }
-    public dataSet = {
-        data: [],
-        labels: []
-    };
     public createNativeView() {
-        let cyan = new Color("#00FFFF");
-        let color = new Color("#FF0000");
-        let color1 = new Color("#00FF00");
-        let arrDataView1: Array<any> = [];
-        let arrLabel: Array<any> = [];
-
-        for (let i = 0; i < 8; i++) {
-            arrDataView1.push({
-                x: i,
-                y: i * 9,
-            });
-
-            arrLabel.push(`Tháng ` + (i + 1));
-        }
-
-        this.dataSet = {
-            data: [{
-                chart: arrDataView1,
-                color: cyan.android
-            }],
-            labels: arrLabel
-        }
-
-
         var lineChartView = new LineChart(this._context);
         var xAxis = lineChartView.getXAxis();
         var yAxisLeft = lineChartView.getAxisLeft();
@@ -79,54 +50,6 @@ export class MPLineChart extends MPChartBase {
         var description = new Description();
         lineChartView.setDescription(description);
 
-        // var lineDatasets = new ArrayList();
-        // var noData = false;
-        // for (var i = 0; i < this.dataSet.data.length; i++) {
-        //     for (var key in this.dataSet.data[i]) {
-        //         if (key == "color") {
-        //             dataset.setColor(this.dataSet.data[i][key]);
-        //         }
-        //         else {
-        //             var label = key;
-        //             var entries = [];
-        //             if (this.dataSet.data[i][key].length < 1) {
-        //                 noData = true;
-        //             }
-
-        //             for (var j = 0; j < this.dataSet.data[i][key].length; j++) {
-        //                 var entrie = new Entry(this.dataSet.data[i][key][j].x, this.dataSet.data[i][key][j].y);
-        //                 entries.push(entrie);
-        //             }
-
-        //             if (entries.length) {
-        //                 var dataset = new LineDataSet(new ArrayList(java.util.Arrays.asList(entries)), label);
-        //                 dataset.setValueFormatter(NewIValueFormatter);
-        //                 lineDatasets.add(dataset);
-        //             }
-
-        //         }
-        //     }
-        // }
-        // if (!noData) {
-        //     let data = new LineData(lineDatasets);
-        //     lineChartView.setData(data);
-        // }
-        // let self = this;
-        // xAxis.setValueFormatter(new IAxisValueFormatter({
-        //     getFormattedValue(value, entry) {
-        //         if (value >= 0) {
-        //             if (parseInt(value.toString()) <= self.dataSet.labels.length - 1 && self.dataSet.labels[parseInt(value.toString())]) {
-        //                 return self.dataSet.labels[parseInt(value.toString())]
-        //             }
-        //             else {
-        //                 return "";
-        //             }
-        //         }
-        //         else {
-        //             return ""
-        //         }
-        //     }
-        // }));
         return lineChartView;
     }
 
