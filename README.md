@@ -41,6 +41,7 @@ Default value is "Bottom."
 
 ### Method
 * **resetZoomLineChart()** - *Function -> void*
+
 Method will reset chart. Call it if some property is change but not apply in UI.
 
 ### Data setup Properties
