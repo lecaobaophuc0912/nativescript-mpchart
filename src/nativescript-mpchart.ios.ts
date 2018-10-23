@@ -189,12 +189,7 @@ export class MPLineChart extends MPChartBase {
                 dataset.circleColors = colorCircle;
                 dataset.circleHoleRadius = 3;
                 dataset.drawCirclesEnabled = items[i].circleEnable;
-                if (i === 0) {
-                    dataset.highlightEnabled = true;
-                }
-                else {
-                    dataset.highlightEnabled = true;
-                }
+                dataset.highlightEnabled = false;
                 if (items[i].highlighColor) {
                     dataset.highlightColor = items[i].highlighColor.ios;
                 }

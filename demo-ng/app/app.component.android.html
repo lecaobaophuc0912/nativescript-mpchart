@@ -2,7 +2,7 @@
     <Button text="onClick" (tap)="onTap($event)" background="violet"></Button>
     <Button text="setDefault" (tap)="onTapDefault($event)"></Button>
     <StackLayout height="500">
-        <MPLineChart height="300" *ngIf="dataSet" [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
+        <MPLineChart *ngIf="dataSet" height="100%" [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
             [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset"
             [highlightPerTapEnabled]="setUp.highlightPerTapEnabled" [highlightPerDragEnabled]="setUp.highlightPerDragEnabled"
             [xAxisGranularity]="setUp.xAxisGranularityProperty" [yAxisGranularity]="setUp.yAxisGranularityProperty" [xAxisLabelPosition]="setUp.xAxisLabelPosition"

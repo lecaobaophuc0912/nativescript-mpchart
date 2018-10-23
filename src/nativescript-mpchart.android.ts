@@ -185,13 +185,8 @@ export class MPLineChart extends MPChartBase {
                     }
                     dataset.setCircleHoleRadius(3);
                     let circleEnable = items[i].circleEnable ? !!items[i].circleEnable : false
-                    dataset.setDrawCircles(circleEnable);
-                    if (i === 0) {
-                        dataset.setHighlightEnabled(true);
-                    }
-                    else {
-                        dataset.setHighlightEnabled(false);
-                    }
+                    dataset.setHighlightEnabled(false);
+
                     if (items[i].highlighColor) {
                         dataset.setHighLightColor(items[i].highlighColor.android);
                     }
