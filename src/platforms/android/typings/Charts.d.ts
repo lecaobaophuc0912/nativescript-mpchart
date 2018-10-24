@@ -1,5 +1,5 @@
 
-// import globalAndroid = android;
+import globalAndroid = android;
 
 declare module com {
 	export module github {
