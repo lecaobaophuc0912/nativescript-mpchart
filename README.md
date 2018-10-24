@@ -38,7 +38,14 @@ Gets or sets granularity (A simple, this is like step of value in yAxis). Defaul
 Gets or sets position of xAxis of chart.
 Value :  "Top" | "Bottom" | "BothSided" | "TopInside" | "BottomInside".
 Default value is "Bottom."
-
+* **xAxisLineColor, leftAxisLineColor, rightAxisLineColor** - *Color*  
+Gets or sets line color of Axis color. Css property 'x-axis-line-color', 'right-axis-line-color','left-axis-line-color'. 
+* **xAxisTextColor, leftAxisTextColor, rightAxisTextColor** - *Color*  
+Gets or sets text color of Axis color. Css property 'x-axis-text-color', 'right-axis-text-color','left-axis-text-color'. 
+* **xAxisMinValue, leftAxisMinValue, rightAxisMinValue** - *number*  
+Gets or sets min value of Axis. 
+* **xAxisMaxValue, leftAxisMaxValue, rightAxisMaxValue** - *number*  
+Gets or sets max value of Axis. 
 ### Method
 * **resetZoomLineChart()** - *Function -> void*
 
