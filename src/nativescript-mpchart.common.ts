@@ -30,6 +30,17 @@ export interface DataChartInterface {
 export type XAxisLabelPosition = "Top" | "Bottom" | "BothSided" | "TopInside" | "BottomInside";
 
 // Property
+
+export const itemsProperty = new Property<MPChartBase, Array<DataChartInterface>>({
+    name: "items"
+});
+itemsProperty.register(MPChartBase);
+
+export const labelsProperty = new Property<MPChartBase, Array<DataSetLabelInterface>>({
+    name: "labels"
+});
+labelsProperty.register(MPChartBase);
+
 export const showLegendProperty = new Property<MPChartBase, boolean>({
     name: "showLegend",
     defaultValue: true,
@@ -93,7 +104,14 @@ descriptionYOffsetProperty.register(MPChartBase);
 
 export const descriptionTextColorProperty = new Property<MPChartBase, Color>({
     name: "descriptionTextColor",
-    valueConverter: (v) => new Color(v)
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
 });
 descriptionTextColorProperty.register(MPChartBase);
 
@@ -101,7 +119,14 @@ descriptionTextColorProperty.register(MPChartBase);
 export const descriptionTextColorCssProperty = new CssProperty<Style, Color>({
     name: "descriptionTextColor",
     cssName: "description-text-color",
-    valueConverter: (v) => new Color(v)
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
 });
 descriptionTextColorCssProperty.register(Style);
 
@@ -132,30 +157,276 @@ export const xAxisGranularityProperty = new Property<MPChartBase, number>({
 });
 xAxisGranularityProperty.register(MPChartBase);
 
-export const yAxisGranularityProperty = new Property<MPChartBase, number>({
-    name: "yAxisGranularity",
+export const leftAxisGranularityProperty = new Property<MPChartBase, number>({
+    name: "leftAxisGranularity",
     defaultValue: 1,
     valueConverter: (v) => {
         if (parseFloat(v) !== NaN) {
             return parseFloat(v);
         }
-        throw new Error("Property 'yAxisGranularity' must be a number");
+        throw new Error("Property 'leftAxisGranularity' must be a number");
     }
 });
-yAxisGranularityProperty.register(MPChartBase);
+leftAxisGranularityProperty.register(MPChartBase);
 
-export const XAxisLabelPositionProperty = new Property<MPChartBase, XAxisLabelPosition>({
+export const rightAxisGranularityProperty = new Property<MPChartBase, number>({
+    name: "rightAxisGranularity",
+    defaultValue: 1,
+    valueConverter: (v) => {
+        if (parseFloat(v) !== NaN) {
+            return parseFloat(v);
+        }
+        throw new Error("Property 'rightAxisGranularity' must be a number");
+    }
+});
+rightAxisGranularityProperty.register(MPChartBase);
+
+
+export const xAxisLabelPositionProperty = new Property<MPChartBase, XAxisLabelPosition>({
     name: "xAxisLabelPosition",
-    defaultValue: "Bottom"
 });
-XAxisLabelPositionProperty.register(MPChartBase);
+xAxisLabelPositionProperty.register(MPChartBase);
 
-export const itemsProperty = new Property<MPChartBase, Array<DataChartInterface>>({
-    name: "items"
+export const xAxisLineColorProperty = new Property<MPChartBase, Color>({
+    name: "xAxisLineColor",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
 });
-itemsProperty.register(MPChartBase);
 
-export const labelsProperty = new Property<MPChartBase, Array<DataSetLabelInterface>>({
-    name: "labels"
+xAxisLineColorProperty.register(MPChartBase);
+
+export const xAxisLineColorCssProperty = new CssProperty<Style, Color>({
+    name: "xAxisLineColor",
+    cssName: "x-axis-line-color",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
 });
-labelsProperty.register(MPChartBase);
+xAxisLineColorCssProperty.register(Style);
+
+
+export const leftAxisLineColorProperty = new Property<MPChartBase, Color>({
+    name: "leftAxisLineColor",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+
+leftAxisLineColorProperty.register(MPChartBase);
+
+export const leftAxisLineColorCssProperty = new CssProperty<Style, Color>({
+    name: "leftAxisLineColor",
+    cssName: "left-axis-line-color",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+leftAxisLineColorCssProperty.register(Style);
+
+export const rightAxisLineColorProperty = new Property<MPChartBase, Color>({
+    name: "rightAxisLineColor",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+
+rightAxisLineColorProperty.register(MPChartBase);
+
+export const rightAxisLineColorCssProperty = new CssProperty<Style, Color>({
+    name: "rightAxisLineColor",
+    cssName: "right-axis-line-color",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+rightAxisLineColorCssProperty.register(Style);
+
+
+export const xAxisTextColorProperty = new Property<MPChartBase, Color>({
+    name: "xAxisTextColor",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+
+xAxisTextColorProperty.register(MPChartBase);
+
+export const xAxisTextColorCssProperty = new CssProperty<Style, Color>({
+    name: "xAxisTextColor",
+    cssName: "x-axis-text-color",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+xAxisTextColorCssProperty.register(Style);
+
+export const leftAxisTextColorProperty = new Property<MPChartBase, Color>({
+    name: "leftAxisTextColor",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+
+leftAxisTextColorProperty.register(MPChartBase);
+
+export const leftAxisTextColorCssProperty = new CssProperty<Style, Color>({
+    name: "leftAxisTextColor",
+    cssName: "left-axis-text-color",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+leftAxisTextColorCssProperty.register(Style);
+
+export const rightAxisTextColorProperty = new Property<MPChartBase, Color>({
+    name: "rightAxisTextColor",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+
+rightAxisTextColorProperty.register(MPChartBase);
+
+export const rightAxisTextColorCssProperty = new CssProperty<Style, Color>({
+    name: "rightAxisTextColor",
+    cssName: "right-axis-text-color",
+    valueConverter: (v) => {
+        if (v) {
+            return new Color(v)
+        }
+        else {
+            return new Color("#000000");
+        }
+    }
+});
+rightAxisTextColorCssProperty.register(Style);
+
+export const xAxisMinValueProperty = new Property<MPChartBase, number>({
+    name: "xAxisMinValue",
+    defaultValue: 0,
+    valueConverter: (v) => {
+        console.log("xAxisMinValueProperty common", v);
+        if (parseFloat(v) !== NaN) {
+            return parseFloat(v);
+        }
+        throw new Error("Property 'xAxisMinValue' must be a number");
+    }
+});
+xAxisMinValueProperty.register(MPChartBase);
+
+
+export const xAxisMaxValueProperty = new Property<MPChartBase, number>({
+    name: "xAxisMaxValue",
+    defaultValue: 0,
+    valueConverter: (v) => {
+        if (parseFloat(v) !== NaN) {
+            return parseFloat(v);
+        }
+        throw new Error("Property 'xAxisMaxValue' must be a number");
+    }
+});
+xAxisMaxValueProperty.register(MPChartBase);
+
+export const leftAxisMinValueProperty = new Property<MPChartBase, number>({
+    name: "leftAxisMinValue",
+    defaultValue: 0,
+    valueConverter: (v) => {
+        if (parseFloat(v) !== NaN) {
+            return parseFloat(v);
+        }
+        throw new Error("Property 'leftAxisMaxValue' must be a number");
+    }
+});
+leftAxisMinValueProperty.register(MPChartBase);
+
+export const leftAxisMaxValueProperty = new Property<MPChartBase, number>({
+    name: "leftAxisMaxValue",
+    defaultValue: 0,
+    valueConverter: (v) => {
+        if (parseFloat(v) !== NaN) {
+            return parseFloat(v);
+        }
+        throw new Error("Property 'leftAxisMaxValue' must be a number");
+    }
+});
+leftAxisMaxValueProperty.register(MPChartBase);
+
+export const rightAxisMinValueProperty = new Property<MPChartBase, number>({
+    name: "rightAxisMinValue",
+    defaultValue: 0,
+    valueConverter: (v) => {
+        if (parseFloat(v) !== NaN) {
+            return parseFloat(v);
+        }
+        throw new Error("Property 'rightAxisMaxValue' must be a number");
+    }
+});
+rightAxisMinValueProperty.register(MPChartBase);
+
+export const rightAxisMaxValueProperty = new Property<MPChartBase, number>({
+    name: "rightAxisMaxValue",
+    defaultValue: 0,
+    valueConverter: (v) => {
+        if (parseFloat(v) !== NaN) {
+            return parseFloat(v);
+        }
+        throw new Error("Property 'rightAxisMaxValue' must be a number");
+    }
+});
+rightAxisMaxValueProperty.register(MPChartBase);

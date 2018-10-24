@@ -1,11 +1,16 @@
-<StackLayout>
+<StackLayout background="#f3f3f3">
     <Button text="onClick" (tap)="onTap($event)" background="violet"></Button>
     <Button text="setDefault" (tap)="onTapDefault($event)"></Button>
     <StackLayout height="500">
-        <MPLineChart *ngIf="dataSet" height="100%" [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
+        <MPLineChart *ngIf="dataSet" height="300" [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
             [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset"
             [highlightPerTapEnabled]="setUp.highlightPerTapEnabled" [highlightPerDragEnabled]="setUp.highlightPerDragEnabled"
             [xAxisGranularity]="setUp.xAxisGranularityProperty" [yAxisGranularity]="setUp.yAxisGranularityProperty" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
+            [leftAxisGranularity]="setUp.leftAxisGranularityProperty" [rightAxisGranularity]="setUp.rightAxisGranularityProperty"
+            [xAxisLineColor]="setUp.xAxisLineColor" [leftAxisLineColor]="setUp.leftAxisLineColor" [rightAxisLineColor]="setUp.rightAxisLineColor"
+            [xAxisTextColor]="setUp.xAxisTextColor" [leftAxisTextColor]="setUp.leftAxisTextColor" [rightAxisTextColor]="setUp.rightAxisTextColor"
+            [xAxisMinValue]="setUp.xAxisMinValue" [leftAxisMinValue]="setUp.leftAxisMinValue" [rightAxisMinValue]="setUp.rightAxisMinValue"
+            [xAxisMaxValue]="setUp.xAxisMaxValue" [leftAxisMaxValue]="setUp.leftAxisMaxValue" [rightAxisMaxValue]="setUp.rightAxisMaxValue"
             [items]="dataSet" [labels]="labels" #lineChart class="mp-chart"></MPLineChart>
     </StackLayout>
 

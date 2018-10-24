@@ -5,7 +5,11 @@
         <MPLineChart *ngIf="dataSet" #lineChart [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
             [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset"
             [descriptionTextColor]="setUp.descriptionTextColor" [highlightPerTapEnabled]="setUp.highlightPerTapEnabled" [highlightPerDragEnabled]="setUp.highlightPerDragEnabled"
-            [xAxisGranularity]="setUp.xAxisGranularityProperty" [yAxisGranularity]="setUp.yAxisGranularityProperty" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
+            [xAxisGranularity]="setUp.xAxisGranularityProperty" [leftAxisGranularity]="setUp.leftAxisGranularityProperty" [rightAxisGranularity]="setUp.rightAxisGranularityProperty"
+            [xAxisLineColor]="setUp.xAxisLineColor" [leftAxisLineColor]="setUp.leftAxisLineColor" [rightAxisLineColor]="setUp.rightAxisLineColor"
+            [xAxisTextColor]="setUp.xAxisTextColor" [leftAxisTextColor]="setUp.leftAxisTextColor" [rightAxisTextColor]="setUp.rightAxisTextColor"
+            [xAxisMinValue]="setUp.xAxisMinValue" [leftAxisMinValue]="setUp.leftAxisMinValue" [rightAxisMinValue]="setUp.rightAxisMinValue"
+            [leftAxisMaxValue]="setUp.leftAxisMaxValue" [rightAxisMaxValue]="setUp.rightAxisMaxValue" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
             [items]="dataSet" [labels]="labels" class="mp-chart"></MPLineChart>
     </StackLayout>
 

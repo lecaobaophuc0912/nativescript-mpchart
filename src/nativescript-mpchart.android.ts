@@ -11,8 +11,27 @@ import {
     highlightPerDragEnabledProperty,
     highlightPerTapEnabledProperty,
     xAxisGranularityProperty,
-    yAxisGranularityProperty,
-    XAxisLabelPositionProperty,
+    leftAxisGranularityProperty,
+    rightAxisGranularityProperty,
+    xAxisLabelPositionProperty,
+    xAxisLineColorCssProperty,
+    xAxisLineColorProperty,
+    leftAxisLineColorProperty,
+    leftAxisLineColorCssProperty,
+    rightAxisLineColorProperty,
+    rightAxisLineColorCssProperty,
+    xAxisTextColorProperty,
+    xAxisTextColorCssProperty,
+    leftAxisTextColorProperty,
+    leftAxisTextColorCssProperty,
+    rightAxisTextColorProperty,
+    rightAxisTextColorCssProperty,
+    xAxisMinValueProperty,
+    xAxisMaxValueProperty,
+    leftAxisMinValueProperty,
+    leftAxisMaxValueProperty,
+    rightAxisMinValueProperty,
+    rightAxisMaxValueProperty,
     itemsProperty,
     labelsProperty,
     DataChartInterface,
@@ -27,6 +46,7 @@ var Entry = com.github.mikephil.charting.data.Entry;
 var ArrayList = java.util.ArrayList;
 var XAxis = com.github.mikephil.charting.components.XAxis;
 var IndexAxisValueFormatter = com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+var DefaultValueFormatter = com.github.mikephil.charting.formatter.DefaultValueFormatter;
 var IAxisValueFormatter = com.github.mikephil.charting.formatter.IAxisValueFormatter;
 var Description = com.github.mikephil.charting.components.Description;
 var IValueFormatter = com.github.mikephil.charting.formatter.IValueFormatter;
@@ -47,12 +67,75 @@ export class MPLineChart extends MPChartBase {
         xAxis.setDrawGridLines(false);
         yAxisLeft.setDrawGridLines(false);
         yAxisRight.setDrawGridLines(false);
+
+        yAxisLeft.setDrawLabels(true);
+        yAxisRight.setDrawLabels(true);
         var description = new Description();
         lineChartView.setDescription(description);
+        lineChartView.setDoubleTapToZoomEnabled(false);
 
         return lineChartView;
     }
+    public [itemsProperty.setNative](items: Array<DataChartInterface>) {
+        var lineDatasets: java.util.ArrayList<any> = new ArrayList();
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].dataSet && items[i].dataSet.length) {
+                let labelLegend = items[i].legendLabel ? items[i].legendLabel : "";
+                let entries = [];
+                for (let j = 0; j < items[i].dataSet.length; j++) {
+                    let entrie = new Entry(items[i].dataSet[j].x, items[i].dataSet[j].y);
+                    entries.push(entrie);
+                }
+                if (entries.length) {
+                    let dataset: com.github.mikephil.charting.data.LineDataSet = new LineDataSet(new ArrayList(java.util.Arrays.asList(entries)), labelLegend);
+                    dataset.setColor(items[i].lineColor.android);
+                    let drawCircle = items[i].circleHoleEnabled ? !!items[i].circleHoleEnabled : false
+                    dataset.setDrawCircleHole(drawCircle);
+                    if (items[i].circleColor) {
+                        dataset.setCircleColor(items[i].circleColor.android);
+                    }
+                    dataset.setCircleHoleRadius(3);
+                    let circleEnable = items[i].circleEnable ? !!items[i].circleEnable : false
+                    dataset.setHighlightEnabled(false);
 
+                    if (items[i].highlighColor) {
+                        dataset.setHighLightColor(items[i].highlighColor.android);
+                    }
+                    lineDatasets.add(dataset);
+
+                }
+            }
+            else {
+                throw new Error("items number " + i + "do not have any item");
+            }
+        }
+        let lineChartData = new LineData(lineDatasets);
+        this.nativeView.setData(lineChartData);
+    }
+
+    public [labelsProperty.setNative](labels: Array<DataSetLabelInterface>) {
+        let self = this;
+        if (labels) {
+            if (this.nativeView.getXAxis()) {
+                this.nativeView.getXAxis().setValueFormatter(new IAxisValueFormatter({
+                    getFormattedValue(value, entry) {
+                        for (let i = 0; i < labels.length; i++) {
+                            if (labels[i].xAxisValue == value) {
+                                return labels[i].label
+                            }
+                        }
+                        return "";
+                    }
+                }));
+            }
+            else {
+                throw new Error("xAxis in labels Property setup undefined");
+            }
+        }
+        else {
+            throw new Error("labels value undefined");
+        }
+    }
     public [showLegendProperty.setNative](value: boolean) {
         let legend = this.nativeView.getLegend();
         console.log("showLegend ", value);
@@ -113,7 +196,6 @@ export class MPLineChart extends MPChartBase {
 
     public [xAxisGranularityProperty.setNative](value: number) {
         if (this.nativeView.getXAxis()) {
-            console.log("set XAxis granularity ", value);
             this.nativeView.getXAxis().setGranularity(value);
         }
         else {
@@ -121,21 +203,28 @@ export class MPLineChart extends MPChartBase {
         }
     }
 
-    public [yAxisGranularityProperty.setNative](value: number) {
-        if (this.nativeView.getAxisLeft() && this.nativeView.getAxisRight()) {
+    public [leftAxisGranularityProperty.setNative](value: number) {
+        if (this.nativeView.getAxisLeft()) {
             this.nativeView.getAxisLeft().setGranularity(value);
+        }
+        else {
+            throw new Error("Property 'leftAxis' of Chart undefined");
+        }
+    }
+    public [rightAxisGranularityProperty.setNative](value: number) {
+        if (this.nativeView.getAxisRight()) {
             this.nativeView.getAxisRight().setGranularity(value);
         }
         else {
-            throw new Error("Property 'leftAxis' or 'rightAxis' of Chart undefined");
+            throw new Error("Property 'rightAxis' of Chart undefined");
         }
     }
 
-    public [XAxisLabelPositionProperty.getDefault](): "Bottom" {
+    public [xAxisLabelPositionProperty.getDefault](): "Bottom" {
         return "Bottom";
     }
 
-    public [XAxisLabelPositionProperty.setNative](value: "Top" | "Bottom" | "BothSided" | "TopInside" | "BottomInside") {
+    public [xAxisLabelPositionProperty.setNative](value: "Top" | "Bottom" | "BothSided" | "TopInside" | "BottomInside") {
         let xAxis = this.nativeView.getXAxis();
         if (xAxis) {
             switch (value) {
@@ -164,73 +253,204 @@ export class MPLineChart extends MPChartBase {
         }
     }
 
-    public [itemsProperty.setNative](items: Array<DataChartInterface>) {
-        var lineDatasets: java.util.ArrayList<any> = new ArrayList();
-        console.log("items length", items.length);
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].dataSet && items[i].dataSet.length) {
-                let labelLegend = items[i].legendLabel ? items[i].legendLabel : "";
-                let entries = [];
-                for (let j = 0; j < items[i].dataSet.length; j++) {
-                    let entrie = new Entry(items[i].dataSet[j].x, items[i].dataSet[j].y);
-                    entries.push(entrie);
-                }
-                if (entries.length) {
-                    let dataset: com.github.mikephil.charting.data.LineDataSet = new LineDataSet(new ArrayList(java.util.Arrays.asList(entries)), labelLegend);
-                    dataset.setColor(items[i].lineColor.android);
-                    let drawCircle = items[i].circleHoleEnabled ? !!items[i].circleHoleEnabled : false
-                    dataset.setDrawCircleHole(drawCircle);
-                    if (items[i].circleColor) {
-                        dataset.setCircleColor(items[i].circleColor.android);
-                    }
-                    dataset.setCircleHoleRadius(3);
-                    let circleEnable = items[i].circleEnable ? !!items[i].circleEnable : false
-                    dataset.setHighlightEnabled(false);
 
-                    if (items[i].highlighColor) {
-                        dataset.setHighLightColor(items[i].highlighColor.android);
-                    }
-                    lineDatasets.add(dataset);
-                }
-            }
-            else {
-                throw new Error("items number " + i + "do not have any item");
-            }
-        }
-        let lineChartData = new LineData(lineDatasets);
-        this.nativeView.setData(lineChartData);
-    }
+    public [xAxisLineColorProperty.setNative](value: Color) {
+        let xAxis: com.github.mikephil.charting.components.XAxis;
+        xAxis = this.nativeView.getXAxis();
 
-    public [labelsProperty.setNative](labels: Array<DataSetLabelInterface>) {
-        let self = this;
-        if (labels) {
-            if (this.nativeView.getXAxis()) {
-                this.nativeView.getXAxis().setValueFormatter(new IAxisValueFormatter({
-                    getFormattedValue(value, entry) {
-                        for (let i = 0; i < labels.length; i++) {
-                            if (labels[i].xAxisValue == value) {
-                                return labels[i].label
-                            }
-                        }
-                        return "";
-                    }
-                }));
-            }
-            else {
-                throw new Error("xAxis in labels Property setup undefined");
-            }
+        if (xAxis && value) {
+            xAxis.setAxisLineColor(value.android);
         }
         else {
-            throw new Error("labels value undefined");
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+    public [xAxisLineColorCssProperty.setNative](value: Color) {
+        let xAxis: com.github.mikephil.charting.components.XAxis;
+        xAxis = this.nativeView.getXAxis();
+        if (xAxis && value) {
+            xAxis.setAxisLineColor(value.android);
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
         }
     }
 
 
+    public [leftAxisLineColorProperty.setNative](value: Color) {
+        let leftAxis: com.github.mikephil.charting.components.YAxis;
+        leftAxis = this.nativeView.getAxisLeft();
+        if (leftAxis && value) {
+            leftAxis.setAxisLineColor(value.android);
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
+    public [leftAxisLineColorCssProperty.setNative](value: Color) {
+        let leftAxis: com.github.mikephil.charting.components.YAxis;
+        leftAxis = this.nativeView.getAxisLeft();
+        if (leftAxis && value) {
+            leftAxis.setAxisLineColor(value.android);
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
+
+    public [rightAxisLineColorProperty.setNative](value: Color) {
+        let rightAxis: com.github.mikephil.charting.components.YAxis;
+        rightAxis = this.nativeView.getAxisRight();
+        if (rightAxis && value) {
+            rightAxis.setAxisLineColor(value.android);
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
+    public [rightAxisLineColorCssProperty.setNative](value: Color) {
+        let rightAxis: com.github.mikephil.charting.components.YAxis;
+        rightAxis = this.nativeView.getAxisRight();
+        if (rightAxis && value) {
+            rightAxis.setAxisLineColor(value.android);
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
+
+    public [xAxisTextColorProperty.setNative](value: Color) {
+        let xAxis: com.github.mikephil.charting.components.XAxis;
+        xAxis = this.nativeView.getXAxis();
+        if (xAxis && value) {
+            xAxis.setTextColor(value.android);
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+    public [xAxisTextColorCssProperty.setNative](value: Color) {
+        let xAxis: com.github.mikephil.charting.components.XAxis;
+        xAxis = this.nativeView.getXAxis();
+        if (xAxis && value) {
+            xAxis.setTextColor(value.android);
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
 
 
+    public [leftAxisTextColorProperty.setNative](value: Color) {
+        let leftAxis: com.github.mikephil.charting.components.YAxis;
+        leftAxis = this.nativeView.getAxisLeft();
+        if (leftAxis && value) {
+            leftAxis.setTextColor(value.android);
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
+    public [leftAxisTextColorCssProperty.setNative](value: Color) {
+        let leftAxis: com.github.mikephil.charting.components.YAxis;
+        leftAxis = this.nativeView.getAxisLeft();
+        if (leftAxis && value) {
+            leftAxis.setTextColor(value.android);
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
 
 
+    public [rightAxisTextColorProperty.setNative](value: Color) {
+        let rightAxis: com.github.mikephil.charting.components.YAxis;
+        rightAxis = this.nativeView.getAxisRight();
+        if (rightAxis && value) {
+            rightAxis.setTextColor(value.android);
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
+    public [rightAxisTextColorCssProperty.setNative](value: Color) {
+        let rightAxis: com.github.mikephil.charting.components.YAxis;
+        rightAxis = this.nativeView.getAxisRight();
+        if (rightAxis && value) {
+            rightAxis.setTextColor(value.android);
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
 
+    public [xAxisMinValueProperty.setNative](value: number) {
+        let xAxis: com.github.mikephil.charting.components.XAxis;
+        xAxis = this.nativeView.getXAxis();
+        if (xAxis) {
+            console.log("xAxisMinValueProperty ", value);
+            xAxis.setAxisMinimum(value);
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+
+    public [xAxisMaxValueProperty.setNative](value: number) {
+        let xAxis: com.github.mikephil.charting.components.XAxis;
+        xAxis = this.nativeView.getXAxis();
+        if (xAxis) {
+            console.log("xAxisMinValueProperty ", value);
+            xAxis.setAxisMaximum(value);
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+
+    public [leftAxisMinValueProperty.setNative](value: number) {
+        let leftAxis: com.github.mikephil.charting.components.YAxis;
+        leftAxis = this.nativeView.getAxisLeft();
+        if (leftAxis) {
+            leftAxis.setAxisMinimum(value);
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
+
+    public [leftAxisMaxValueProperty.setNative](value: number) {
+        let leftAxis: com.github.mikephil.charting.components.YAxis;
+        leftAxis = this.nativeView.getAxisLeft();
+        if (leftAxis) {
+            leftAxis.setAxisMaximum(value);
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
+
+    public [leftAxisMaxValueProperty.setNative](value: number) {
+        let rightAxis: com.github.mikephil.charting.components.YAxis;
+        rightAxis = this.nativeView.getAxisRight();
+        if (rightAxis) {
+            rightAxis.setAxisMinimum(value);
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
+
+    public [rightAxisMaxValueProperty.setNative](value: number) {
+        let rightAxis: com.github.mikephil.charting.components.YAxis;
+        rightAxis = this.nativeView.getAxisRight();
+        if (rightAxis) {
+            rightAxis.setAxisMaximum(value);
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
 
 
 

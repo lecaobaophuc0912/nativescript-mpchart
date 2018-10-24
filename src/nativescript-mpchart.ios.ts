@@ -11,8 +11,27 @@ import {
     highlightPerDragEnabledProperty,
     highlightPerTapEnabledProperty,
     xAxisGranularityProperty,
-    yAxisGranularityProperty,
-    XAxisLabelPositionProperty,
+    leftAxisGranularityProperty,
+    rightAxisGranularityProperty,
+    xAxisLineColorProperty,
+    xAxisLineColorCssProperty,
+    xAxisLabelPositionProperty,
+    leftAxisLineColorProperty,
+    leftAxisLineColorCssProperty,
+    rightAxisLineColorProperty,
+    rightAxisLineColorCssProperty,
+    xAxisTextColorProperty,
+    xAxisTextColorCssProperty,
+    leftAxisTextColorProperty,
+    leftAxisTextColorCssProperty,
+    rightAxisTextColorProperty,
+    rightAxisTextColorCssProperty,
+    xAxisMinValueProperty,
+    xAxisMaxValueProperty,
+    leftAxisMinValueProperty,
+    leftAxisMaxValueProperty,
+    rightAxisMinValueProperty,
+    rightAxisMaxValueProperty,
     itemsProperty,
     labelsProperty,
     DataChartInterface,
@@ -37,6 +56,9 @@ export class MPLineChart extends MPChartBase {
         lineChartView.highlightPerDragEnabled = false;
         lineChartView.highlightPerTapEnabled = false;
 
+        lineChartView.xAxis.axisMinimum = 0;
+        lineChartView.leftAxis.axisMinimum = 0;
+        lineChartView.rightAxis.axisMinimum = 0;
         return lineChartView;
     }
 
@@ -49,7 +71,64 @@ export class MPLineChart extends MPChartBase {
     public resetZoomLineChart() {
         this.nativeView.resetZoom();
     }
+    public [itemsProperty.setNative](items: Array<DataChartInterface>) {
+        let lineChartData = LineChartData.new();
+        console.log("items length", items.length);
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].dataSet && items[i].dataSet.length) {
+                let labelLegend = items[i].legendLabel ? items[i].legendLabel : "";
+                let entries: NSMutableArray<any> = NSMutableArray.new();
+                for (let j = 0; j < items[i].dataSet.length; j++) {
+                    let entrie = ChartDataEntry.new().initWithXY(items[i].dataSet[j].x, items[i].dataSet[j].y);
+                    entries.addObject(entrie);
+                }
+                let dataset: LineChartDataSet = LineChartDataSet.new().initWithValuesLabel(entries, labelLegend);
+                dataset.lineColor = items[i].lineColor.ios;
+                dataset.setLineColor();
+                dataset.drawCircleHoleEnabled = items[i].circleHoleEnabled ? !!items[i].circleHoleEnabled : false;
+                let colorCircle: NSMutableArray<any> = NSMutableArray.new();
+                if (items[i].circleColor) {
+                    colorCircle.addObject(items[i].circleColor.ios);
+                }
+                dataset.circleColors = colorCircle;
+                dataset.circleHoleRadius = 3;
+                dataset.drawCirclesEnabled = items[i].circleEnable;
+                dataset.highlightEnabled = false;
+                if (items[i].highlighColor) {
+                    dataset.highlightColor = items[i].highlighColor.ios;
+                }
+                lineChartData.addDataSet(dataset);
+            }
+            else {
+                throw new Error("items number " + i + "do not have any item");
+            }
+        }
+        this.nativeView.lineChartData = lineChartData;
+        this.nativeView.setData();
+    }
 
+    public [labelsProperty.setNative](labels: Array<DataSetLabelInterface>) {
+        if (labels) {
+            let formatter: any = ChartDefaultAxisValueFormatter.alloc().initWithBlock(function (value, axis) {
+                for (let i = 0; i < labels.length; i++) {
+                    if (labels[i].xAxisValue == value) {
+                        return labels[i].label
+                    }
+                }
+                return "";
+            })
+            let xAxis = this.nativeView.xAxis;
+            if (xAxis) {
+                xAxis.valueFormatter = formatter;
+            }
+            else {
+                throw new Error("xAxis in labels Property setup undefined");
+            }
+        }
+        else {
+            throw new Error("labels value undefined");
+        }
+    }
     public [showLegendProperty.setNative](value: boolean) {
         let legend = this.nativeView.legend;
         console.log("showLegend ", value);
@@ -120,25 +199,33 @@ export class MPLineChart extends MPChartBase {
         }
     }
 
-    public [yAxisGranularityProperty.setNative](value: number) {
+    public [leftAxisGranularityProperty.setNative](value: number) {
         let leftAxis: ChartYAxis;
-        let rightAxis: ChartYAxis;
         leftAxis = this.nativeView.leftAxis;
-        rightAxis = this.nativeView.rightAxis;
-        if (leftAxis && rightAxis) {
+        if (leftAxis) {
             leftAxis.granularity = value;
+        }
+        else {
+            throw new Error("Property 'leftAxis' of Chart undefined");
+        }
+    }
+
+    public [rightAxisGranularityProperty.setNative](value: number) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis) {
             rightAxis.granularity = value;
         }
         else {
-            throw new Error("Property 'leftAxis' or 'rightAxis' of Chart undefined");
+            throw new Error("Property  'rightAxis' of Chart undefined");
         }
     }
 
-    public [XAxisLabelPositionProperty.getDefault](): "Bottom" {
+    public [xAxisLabelPositionProperty.getDefault](): "Bottom" {
         return "Bottom";
     }
 
-    public [XAxisLabelPositionProperty.setNative](value: "Top" | "Bottom" | "BothSided" | "TopInside" | "BottomInside") {
+    public [xAxisLabelPositionProperty.setNative](value: "Top" | "Bottom" | "BothSided" | "TopInside" | "BottomInside") {
         let xAxis = this.nativeView.xAxis;
         if (xAxis) {
             switch (value) {
@@ -167,65 +254,197 @@ export class MPLineChart extends MPChartBase {
             throw new Error("Property 'xAxis' of Chart undefined");
         }
     }
-    public [itemsProperty.setNative](items: Array<DataChartInterface>) {
-        let lineChartData = LineChartData.new();
-        console.log("items length", items.length);
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].dataSet && items[i].dataSet.length) {
-                let labelLegend = items[i].legendLabel ? items[i].legendLabel : "";
-                let entries: NSMutableArray<any> = NSMutableArray.new();
-                for (let j = 0; j < items[i].dataSet.length; j++) {
-                    let entrie = ChartDataEntry.new().initWithXY(items[i].dataSet[j].x, items[i].dataSet[j].y);
-                    entries.addObject(entrie);
-                }
-                let dataset: LineChartDataSet = LineChartDataSet.new().initWithValuesLabel(entries, labelLegend);
-                dataset.lineColor = items[i].lineColor.ios;
-                dataset.setLineColor();
-                dataset.drawCircleHoleEnabled = items[i].circleHoleEnabled ? !!items[i].circleHoleEnabled : false;
-                let colorCircle: NSMutableArray<any> = NSMutableArray.new();
-                if (items[i].circleColor) {
-                    colorCircle.addObject(items[i].circleColor.ios);
-                }
-                dataset.circleColors = colorCircle;
-                dataset.circleHoleRadius = 3;
-                dataset.drawCirclesEnabled = items[i].circleEnable;
-                dataset.highlightEnabled = false;
-                if (items[i].highlighColor) {
-                    dataset.highlightColor = items[i].highlighColor.ios;
-                }
-                lineChartData.addDataSet(dataset);
-            }
-            else {
-                throw new Error("items number " + i + "do not have any item");
-            }
-        }
-        this.nativeView.lineChartData = lineChartData;
-        this.nativeView.setData();
-    }
-
-    public [labelsProperty.setNative](labels: Array<DataSetLabelInterface>) {
-        if (labels) {
-            let formatter: any = ChartDefaultAxisValueFormatter.alloc().initWithBlock(function (value, axis) {
-                for (let i = 0; i < labels.length; i++) {
-                    if (labels[i].xAxisValue == value) {
-                        return labels[i].label
-                    }
-                }
-                return "";
-            })
-            let xAxis = this.nativeView.xAxis;
-            if (xAxis) {
-                xAxis.valueFormatter = formatter;
-            }
-            else {
-                throw new Error("xAxis in labels Property setup undefined");
-            }
+    public [xAxisLineColorProperty.setNative](value: Color) {
+        let xAxis: ChartXAxis;
+        xAxis = this.nativeView.xAxis;
+        if (xAxis) {
+            xAxis.axisLineColor = value.ios;
         }
         else {
-            throw new Error("labels value undefined");
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+    public [xAxisLineColorCssProperty.setNative](value: Color) {
+        let xAxis: ChartXAxis;
+        xAxis = this.nativeView.xAxis;
+        if (xAxis) {
+            xAxis.axisLineColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
         }
     }
 
+    public [leftAxisLineColorProperty.setNative](value: Color) {
+        let leftAxis: ChartYAxis;
+        leftAxis = this.nativeView.leftAxis;
+        if (leftAxis) {
+            leftAxis.axisLineColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
+    public [leftAxisLineColorCssProperty.setNative](value: Color) {
+        let leftAxis: ChartYAxis;
+        leftAxis = this.nativeView.leftAxis;
+        if (leftAxis) {
+            leftAxis.axisLineColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
+
+    public [rightAxisLineColorProperty.setNative](value: Color) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis) {
+            rightAxis.axisLineColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
+    public [rightAxisLineColorCssProperty.setNative](value: Color) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis) {
+            rightAxis.axisLineColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
+
+
+    public [xAxisTextColorProperty.setNative](value: Color) {
+        let xAxis: ChartXAxis;
+        xAxis = this.nativeView.xAxis;
+        if (xAxis && value) {
+            xAxis.labelTextColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+    public [xAxisTextColorCssProperty.setNative](value: Color) {
+        let xAxis: ChartXAxis;
+        xAxis = this.nativeView.xAxis;
+        if (xAxis && value) {
+            xAxis.labelTextColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+
+
+    public [leftAxisTextColorProperty.setNative](value: Color) {
+        let leftAxis: ChartYAxis;
+        leftAxis = this.nativeView.leftAxis;
+        if (leftAxis && value) {
+            leftAxis.labelTextColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
+    public [leftAxisTextColorCssProperty.setNative](value: Color) {
+        let leftAxis: ChartYAxis;
+        leftAxis = this.nativeView.leftAxis;
+        if (leftAxis && value) {
+            leftAxis.labelTextColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'leftAxis' of Chart undefined");
+        }
+    }
+
+
+    public [rightAxisTextColorProperty.setNative](value: Color) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis && value) {
+            rightAxis.labelTextColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
+    public [rightAxisTextColorCssProperty.setNative](value: Color) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis && value) {
+            rightAxis.labelTextColor = value.ios;
+        }
+        else {
+            throw new Error("Property  'rightAxis' of Chart undefined");
+        }
+    }
+
+    public [xAxisMinValueProperty.setNative](value: number) {
+        let xAxis: ChartXAxis;
+        xAxis = this.nativeView.xAxis;
+        if (xAxis) {
+            xAxis.axisMinimum = value
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+
+    public [xAxisMaxValueProperty.setNative](value: number) {
+        let xAxis: ChartXAxis;
+        xAxis = this.nativeView.xAxis;
+        if (xAxis) {
+            xAxis.axisMaximum = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+    public [leftAxisMinValueProperty.setNative](value: number) {
+        let leftAxis: ChartYAxis;
+        leftAxis = this.nativeView.leftAxis;
+        if (leftAxis) {
+            leftAxis.axisMinimum = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+    public [leftAxisMaxValueProperty.setNative](value: number) {
+        let leftAxis: ChartYAxis;
+        leftAxis = this.nativeView.leftAxis;
+        if (leftAxis) {
+            leftAxis.axisMaximum = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+    public [rightAxisMinValueProperty.setNative](value: number) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis) {
+            rightAxis.axisMinimum = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
+
+    public [rightAxisMaxValueProperty.setNative](value: number) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis) {
+            rightAxis.axisMaximum = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' of Chart undefined");
+        }
+    }
     // @ObjCClass(TTRangeSliderDelegate)
     // export class TTRangeSliderDelegateImpl extends NSObject implements TTRangeSliderDelegate {
     //     public owner: WeakRef<RangeSeekBar>;
