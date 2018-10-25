@@ -52,6 +52,7 @@ Gets or sets formatter value for left and right Axis. Now, the plugin support tw
 Default value not format it show like input.
 SEE DETAIL IN DEMO.
 * **font** - *string* - only iOS - this is Name of Font Name.
+
 Gets or sets font of all text in chart such as legend text, axis label text, description text, value in line text..etc.etc... 
 To use it you need add file .ttf from app/fonts/font-name.ttf. 
 WATCH DETAIL IN DEMO.
