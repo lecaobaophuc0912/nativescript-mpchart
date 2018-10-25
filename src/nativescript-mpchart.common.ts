@@ -17,6 +17,11 @@ export interface DataSetLabelInterface {
     label: string
 }
 
+export interface YAxisFormatterInterface {
+    type: TypeFormatter,
+    numberOfDigits?: number
+}
+
 export interface DataChartInterface {
     dataSet: Array<DataSetChartInterface>;
     lineColor: Color;
@@ -28,6 +33,7 @@ export interface DataChartInterface {
 }
 // Type
 export type XAxisLabelPosition = "Top" | "Bottom" | "BothSided" | "TopInside" | "BottomInside";
+export type TypeFormatter = "Int" | "Float"
 
 // Property
 
@@ -430,3 +436,21 @@ export const rightAxisMaxValueProperty = new Property<MPChartBase, number>({
     }
 });
 rightAxisMaxValueProperty.register(MPChartBase);
+
+export const leftAxisFormatterProperty = new Property<MPChartBase, YAxisFormatterInterface>({
+    name: "leftAxisFormatter",
+    valueChanged: function (value) {
+        console.log("value Change ", value);
+    }
+});
+leftAxisFormatterProperty.register(MPChartBase);
+export const rightAxisFormatterProperty = new Property<MPChartBase, YAxisFormatterInterface>({
+    name: "rightAxisFormatter",
+});
+rightAxisFormatterProperty.register(MPChartBase);
+
+export const fontProperty = new Property<MPChartBase, string>({
+    name: "font",
+});
+fontProperty.register(MPChartBase);
+

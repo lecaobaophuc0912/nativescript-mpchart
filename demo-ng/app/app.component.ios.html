@@ -1,6 +1,8 @@
 <StackLayout>
     <Button text="onClick" (tap)="onTap($event)"></Button>
     <Button text="setDefault" (tap)="onTapDefault($event)"></Button>
+    <Button text="onTap" (tap)="onTapFont()"></Button>
+
     <StackLayout height="500">
         <MPLineChart *ngIf="dataSet" #lineChart [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
             [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset"
@@ -10,7 +12,6 @@
             [xAxisTextColor]="setUp.xAxisTextColor" [leftAxisTextColor]="setUp.leftAxisTextColor" [rightAxisTextColor]="setUp.rightAxisTextColor"
             [xAxisMinValue]="setUp.xAxisMinValue" [leftAxisMinValue]="setUp.leftAxisMinValue" [rightAxisMinValue]="setUp.rightAxisMinValue"
             [leftAxisMaxValue]="setUp.leftAxisMaxValue" [rightAxisMaxValue]="setUp.rightAxisMaxValue" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
-            [items]="dataSet" [labels]="labels" class="mp-chart"></MPLineChart>
+            [leftAxisFormatter]="leftAxisFormatter" [rightAxisFormatter]="rightAxisFormatter" [items]="dataSet" [labels]="labels"
+            [font]="setUp.font" class="mp-chart"></MPLineChart>
     </StackLayout>
-
-</StackLayout>

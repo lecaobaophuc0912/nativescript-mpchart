@@ -32,11 +32,15 @@ import {
     leftAxisMaxValueProperty,
     rightAxisMinValueProperty,
     rightAxisMaxValueProperty,
+    leftAxisFormatterProperty,
+    rightAxisFormatterProperty,
+    fontProperty,
     itemsProperty,
     labelsProperty,
     DataChartInterface,
     DataSetChartInterface,
     DataSetLabelInterface,
+    YAxisFormatterInterface,
 } from "./nativescript-mpchart.common";
 import { Color } from "tns-core-modules/color";
 import { layout } from "tns-core-modules/utils/utils";
@@ -445,41 +449,125 @@ export class MPLineChart extends MPChartBase {
             throw new Error("Property  'xAxis' of Chart undefined");
         }
     }
-    // @ObjCClass(TTRangeSliderDelegate)
-    // export class TTRangeSliderDelegateImpl extends NSObject implements TTRangeSliderDelegate {
-    //     public owner: WeakRef<RangeSeekBar>;
 
-    //     public static initWithOwner(owner: WeakRef<RangeSeekBar>): TTRangeSliderDelegateImpl {
-    //         let delegate = TTRangeSliderDelegateImpl.new() as TTRangeSliderDelegateImpl;
-    //         delegate.owner = owner;
-    //         return delegate;
-    //     }
+    public [leftAxisFormatterProperty.setNative](formatterValue: YAxisFormatterInterface) {
+        if (formatterValue) {
+            let leftAxis: ChartYAxis = this.nativeView.leftAxis;
+            switch (formatterValue.type) {
+                case "Int":
+                    var formatter: ChartDefaultAxisValueFormatter = ChartDefaultAxisValueFormatter.alloc().initWithBlock(function (value, axis) {
+                        if (value == 0 || value) {
+                            return value.toFixed();
+                        }
+                        else {
+                            return "";
+                        }
+                    })
+                    leftAxis.valueFormatter = formatter;
+                    break;
+                case "Float":
+                    var formatter: ChartDefaultAxisValueFormatter = ChartDefaultAxisValueFormatter.alloc().initWithBlock(function (value, axis) {
+                        if (value == 0 || value) {
+                            return value.toFixed(formatterValue.numberOfDigits);
+                        }
+                        else {
+                            return "";
+                        }
+                    })
+                    leftAxis.valueFormatter = formatter;
+                    break;
 
-    //     public rangeSliderDidChangeSelectedMinimumValueAndMaximumValue(sender: TTRangeSlider, selectedMinimum: number, selectedMaximum: number): void {
-    //         if (this.owner && this.owner.get()) {
-    //             let args = {
-    //                 eventName: RangeSeekBarBase.rangeSeekBarChangedEvent,
-    //                 object: sender,
-    //                 value: {
-    //                     minValue: sender.selectedMinimum,
-    //                     maxValue: sender.selectedMaximum
-    //                 }
-    //             } as RangeSeekBarEventData;
-    //             this.owner.get().notify(args);
-    //         }
-    //     }
+                default:
+                    break;
+            }
+        }
+    }
 
-    //     public didEndTouchesInRangeSlider(sender: TTRangeSlider): void {
-    //         if (this.owner && this.owner.get()) {
-    //             let args = {
-    //                 eventName: RangeSeekBarBase.rangeSeekBarFinalValueEvent,
-    //                 object: sender,
-    //                 value: {
-    //                     minValue: sender.selectedMinimum,
-    //                     maxValue: sender.selectedMaximum
-    //                 }
-    //             } as RangeSeekBarEventData;
-    //             this.owner.get().notify(args);
-    //         }
-    //     }
+    public [rightAxisFormatterProperty.setNative](formatterValue: YAxisFormatterInterface) {
+        if (formatterValue) {
+            let rightAxis: ChartYAxis = this.nativeView.rightAxis;
+            switch (formatterValue.type) {
+                case "Int":
+                    var formatter: ChartDefaultAxisValueFormatter = ChartDefaultAxisValueFormatter.alloc().initWithBlock(function (value, axis) {
+                        if (value == 0 || value) {
+                            return value.toFixed();
+                        }
+                        else {
+                            return "";
+                        }
+                    })
+                    rightAxis.valueFormatter = formatter;
+                    break;
+                case "Float":
+                    var formatter: ChartDefaultAxisValueFormatter = ChartDefaultAxisValueFormatter.alloc().initWithBlock(function (value, axis) {
+                        if (value == 0 || value) {
+                            return value.toFixed(formatterValue.numberOfDigits);
+                        }
+                        else {
+                            return "";
+                        }
+                    })
+                    rightAxis.valueFormatter = formatter;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    public [fontProperty.setNative](fontName: string) {
+        let font: string;
+        let familyNames = UIFont.familyNames;
+        let xAxis = this.nativeView.xAxis;
+        let leftAxis = this.nativeView.leftAxis;
+        let rightAxis = this.nativeView.rightAxis;
+        for (var i = 0; i < familyNames.count; ++i) {
+            if (familyNames[i] == fontName) {
+                font = fontName;
+                break;
+            }
+            var famName = familyNames[i];
+            var fontNamesForFamily = UIFont.fontNamesForFamilyName(famName);
+            for (var k = 0; k < fontNamesForFamily.count; ++k) {
+                if (fontName == fontNamesForFamily[k]) {
+                    font = fontName;
+                    break;
+                }
+            }
+        }
+        if (font) {
+            //set font for axis
+            if (xAxis) {
+                console.log(" xAxis.labelFont ", xAxis.labelFont.fontName);
+                xAxis.labelFont = UIFont.fontWithNameSize(font, xAxis.labelFont.pointSize);
+            }
+            if (leftAxis) {
+                leftAxis.labelFont = UIFont.fontWithNameSize(font, leftAxis.labelFont.pointSize);
+            }
+            if (rightAxis) {
+                rightAxis.labelFont = UIFont.fontWithNameSize(font, rightAxis.labelFont.pointSize);
+            }
+            //set font for value in line
+            if (this.nativeView.data) {
+                let dataSets = this.nativeView.data.dataSets;
+                if (dataSets) {
+                    for (let i = 0; i < dataSets.count; i++) {
+                        dataSets[i].valueFont = UIFont.fontWithNameSize(font, dataSets[i].valueFont.pointSize);
+                    }
+                }
+            }
+            //set font for legend
+            if (this.nativeView.legend) {
+                this.nativeView.legend.font = UIFont.fontWithNameSize(font, this.nativeView.legend.font.pointSize);
+            }
+            //set font for description
+            if (this.nativeView.description) {
+                this.nativeView.chartDescription.font = UIFont.fontWithNameSize(font, this.nativeView.chartDescription.font.pointSize);
+            }
+        }
+        else {
+            throw new Error("xAxisFontProperty Font " + fontName + " Do not exist");
+        }
+    }
 }

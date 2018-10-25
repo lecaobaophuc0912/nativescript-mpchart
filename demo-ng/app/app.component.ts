@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Self } from "@angular/core";
 import { Color } from "tns-core-modules/color/color";
-import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface } from "nativescript-mpchart";
+import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface, YAxisFormatterInterface } from "nativescript-mpchart";
+declare var UIFont: any;
 @Component({
     selector: "ns-app",
     moduleId: module.id,
@@ -9,6 +10,7 @@ import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface } from
 
 export class AppComponent {
     @ViewChild('lineChart') lineChart: ElementRef;
+
     public setUp: any = {
         showGridLines: false,
         showLegend: true,
@@ -40,7 +42,16 @@ export class AppComponent {
         rightAxisMinValue: 9,
         rightAxisMaxValue: 70,
 
-        xAxisLabelPosition: "Bottom"
+        font: "Papyrus",
+        xAxisLabelPosition: "Bottom",
+    };
+    public leftAxisFormatter: YAxisFormatterInterface = {
+        type: "Float",
+        numberOfDigits: 1
+    };
+    public rightAxisFormatter: YAxisFormatterInterface = {
+        type: "Float",
+        numberOfDigits: 1
     };
     public dataSet: Array<DataChartInterface>;
     public labels: Array<DataSetLabelInterface>;
@@ -53,7 +64,6 @@ export class AppComponent {
         let arrDataView1: Array<DataSetChartInterface> = [];
         let arrDataView2: Array<DataSetChartInterface> = [];
         let arrLabel: Array<DataSetLabelInterface> = [];
-
         for (let i = 0; i < 8; i++) {
             arrDataView1.push({
                 x: i,
@@ -97,6 +107,14 @@ export class AppComponent {
     }
 
     onTap(args) {
+        this.leftAxisFormatter = {
+            type: "Float",
+            numberOfDigits: 2
+        }
+        this.rightAxisFormatter = {
+            type: "Float",
+            numberOfDigits: 2
+        }
         this.setUp.scaleEnable = true;
         this.setUp.showLegend = !this.setUp.showLegend;
 
@@ -173,6 +191,12 @@ export class AppComponent {
     }
 
     onTapDefault(args) {
+        this.leftAxisFormatter = {
+            type: "Int"
+        }
+        this.rightAxisFormatter = {
+            type: "Int"
+        }
         this.setUp = {
             showGridLines: false,
             showLegend: true,
@@ -265,4 +289,24 @@ export class AppComponent {
         this.labels = arrLabel;
         this.lineChart.nativeElement.resetZoomLineChart();
     }
+
+
+    onTapFont() {
+        var retFonts = [];
+        var familyNames = UIFont.familyNames;
+        for (var i = 0; i < familyNames.count; ++i) {
+            if (familyNames[i] == 'Material Icons') {
+            }
+            var famName = familyNames[i];
+            var fontNamesForFamily = UIFont.fontNamesForFamilyName(famName);
+            for (var k = 0; k < fontNamesForFamily.count; ++k) {
+                var fontName = fontNamesForFamily[k];
+                retFonts.push(fontName);
+            }
+        }
+        this.lineChart.nativeElement.ios.leftAxis.labelFont = UIFont.fontWithNameSize("Papyrus", this.lineChart.nativeElement.ios.xAxis.labelFont.pointSize);
+        console.log("onTapFont ", this.lineChart.nativeElement.ios.leftAxis.labelFont.fontName);
+        this.lineChart.nativeElement.resetZoomLineChart();
+    }
 }
+

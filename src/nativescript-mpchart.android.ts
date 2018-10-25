@@ -32,11 +32,14 @@ import {
     leftAxisMaxValueProperty,
     rightAxisMinValueProperty,
     rightAxisMaxValueProperty,
+    leftAxisFormatterProperty,
+    rightAxisFormatterProperty,
     itemsProperty,
     labelsProperty,
     DataChartInterface,
     DataSetChartInterface,
     DataSetLabelInterface,
+    YAxisFormatterInterface
 } from "./nativescript-mpchart.common";
 import { Color } from "tns-core-modules/color";
 var LineChart = com.github.mikephil.charting.charts.LineChart;
@@ -50,6 +53,9 @@ var DefaultValueFormatter = com.github.mikephil.charting.formatter.DefaultValueF
 var IAxisValueFormatter = com.github.mikephil.charting.formatter.IAxisValueFormatter;
 var Description = com.github.mikephil.charting.components.Description;
 var IValueFormatter = com.github.mikephil.charting.formatter.IValueFormatter;
+
+
+
 export class MPLineChart extends MPChartBase {
     public nativeView: com.github.mikephil.charting.charts.LineChart;
     public resetZoomLineChart() {
@@ -452,48 +458,89 @@ export class MPLineChart extends MPChartBase {
         }
     }
 
+    public [leftAxisFormatterProperty.setNative](formatterValue: YAxisFormatterInterface) {
+        if (formatterValue) {
+            let leftAxis: com.github.mikephil.charting.components.YAxis = this.nativeView.getAxisLeft();
+            let formatter: com.github.mikephil.charting.formatter.IAxisValueFormatter;
+            switch (formatterValue.type) {
+                case "Int":
+                    formatter = new IAxisValueFormatter({
+                        getFormattedValue(value, entry) {
+                            if (value == 0 || value) {
+                                return value.toFixed();
+                            }
+                            else {
+                                return "";
+                            }
+                        }
+                    });
+                    leftAxis.setValueFormatter(formatter);
+                    break;
+                case "Float":
+                    formatter = new IAxisValueFormatter({
+                        getFormattedValue(value, entry) {
+                            if (value == 0 || value) {
+                                return value.toFixed(formatterValue.numberOfDigits);
+                            }
+                            else {
+                                return "";
+                            }
+                        }
+                    });
+                    leftAxis.setValueFormatter(formatter);
+                    break;
 
+                default:
+                    break;
+            }
+        }
+    }
+    public [rightAxisFormatterProperty.setNative](formatterValue: YAxisFormatterInterface) {
+        if (formatterValue) {
+            let rightAxis: com.github.mikephil.charting.components.YAxis = this.nativeView.getAxisRight();
+            let formatter: com.github.mikephil.charting.formatter.IAxisValueFormatter;
+            switch (formatterValue.type) {
+                case "Int":
+                    formatter = new IAxisValueFormatter({
+                        getFormattedValue(value, entry) {
+                            if (value == 0 || value) {
+                                return value.toFixed();
+                            }
+                            else {
+                                return "";
+                            }
+                        }
+                    });
+                    rightAxis.setValueFormatter(formatter);
+                    break;
+                case "Float":
+                    formatter = new IAxisValueFormatter({
+                        getFormattedValue(value, entry) {
+                            if (value == 0 || value) {
+                                return value.toFixed(formatterValue.numberOfDigits);
+                            }
+                            else {
+                                return "";
+                            }
+                        }
+                    });
+                    rightAxis.setValueFormatter(formatter);
+                    break;
 
+                default:
+                    break;
+            }
+        }
+    }
 
-
-
-
-    // // RangeSeekbarChangeListener END
-
-    // // RangeSeekbarFinalValueListener START
-    // interface RangeSeekbarFinalValueListener extends java.lang.Object, com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener {
-    //     new(owner: WeakRef<RangeSeekBar>): RangeSeekbarFinalValueListener;
-    // }
-
-    // let RangeSeekbarFinalValueListener: RangeSeekbarFinalValueListener;
-
-    // function initRangeSeekbarFinalValueListener() {
-    //     if (RangeSeekbarFinalValueListener) {
-    //         return;
-    //     }
-
-    //     @Interfaces([com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener])
-    //     class RangeSeekbarFinalValueListenerImpl extends java.lang.Object implements com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener {
-
-    //         constructor(private owner: WeakRef<RangeSeekBar>) {
-    //             super();
-    //             return global.__native(this);
-    //         }
-
-    //         public finalValue(minValue: any, maxValue: any): void {
-    //             if (this.owner && this.owner.get()) {
-    //                 let args = {
-    //                     eventName: RangeSeekBarBase.rangeSeekBarFinalValueEvent,
-    //                     object: this.owner,
-    //                     value: {
-    //                         minValue: minValue,
-    //                         maxValue: maxValue
-    //                     }
-    //                 } as RangeSeekBarEventData;
-    //                 this.owner.get().notify(args);
-    //             }
-    //         }
-    //     }
-    //     RangeSeekbarFinalValueListener = RangeSeekbarFinalValueListenerImpl as any;
 }
+
+
+    // RangeSeekbarChangeListener END
+
+    // RangeSeekbarFinalValueListener START
+
+
+
+
 // RangeSeekbarFinalValueListener END

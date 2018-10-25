@@ -1,6 +1,7 @@
 # NativeScript MPChart UI 
 A NativeScript MPChart for Android and iOS.
-This plugin in develop and will update more type chart and feature in future.
+This plugin still in develop and will update more type chart and feature in future.
+Because I don't have much time so it only have demo-ng is detail But it can work in core.
 Now, a plugin have simple LineChart.
 ### Based on
 [Charts](https://github.com/LeCaoPhuc/Charts) for iOS
@@ -46,6 +47,15 @@ Gets or sets text color of Axis color. Css property 'x-axis-text-color', 'right-
 Gets or sets min value of Axis. 
 * **xAxisMaxValue, leftAxisMaxValue, rightAxisMaxValue** - *number*  
 Gets or sets max value of Axis. 
+* **leftAxisFormatter, rightAxisFormatter** - *YAxisFormatterInterface*  
+Gets or sets formatter value for left and right Axis. Now, the plugin support two type is:  "Int" | "Float".
+Default value not format it show like input.
+SEE DETAIL IN DEMO.
+* **font** - *string* - only iOS - this is Name of Font Name
+Gets or sets font of all text in chart such as legend text, axis label text, description text, value in line text..etc.etc... 
+To use it you need add file .ttf from app/fonts/font-name.ttf. 
+WATCH DETAIL IN DEMO.
+
 ### Method
 * **resetZoomLineChart()** - *Function -> void*
 
@@ -79,6 +89,11 @@ DataChartInterface {
     circleEnable?: boolean;
     legendLabel?: string;
 }
+
+YAxisFormatterInterface {
+    type: TypeFormatter,
+    numberOfDigits?: number
+}
 ```
 
 ## Usage in Angular
@@ -105,24 +120,35 @@ to full in parent layout.
 
 ```html
 <!-- app.component.html -->
-<StackLayout>
-    <MPLineChart *ngIf="dataSet" [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
+    <StackLayout height="500">
+        <MPLineChart *ngIf="dataSet" #lineChart [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
             [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset"
-            [highlightPerTapEnabled]="setUp.highlightPerTapEnabled" [highlightPerDragEnabled]="setUp.highlightPerDragEnabled"
-            [xAxisGranularity]="setUp.xAxisGranularityProperty" [yAxisGranularity]="setUp.yAxisGranularityProperty" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
-            [items]="dataSet" [labels]="labels" #lineChart class="mp-chart"></MPLineChart>
-</StackLayout>
+            [descriptionTextColor]="setUp.descriptionTextColor" [highlightPerTapEnabled]="setUp.highlightPerTapEnabled" [highlightPerDragEnabled]="setUp.highlightPerDragEnabled"
+            [xAxisGranularity]="setUp.xAxisGranularityProperty" [leftAxisGranularity]="setUp.leftAxisGranularityProperty" [rightAxisGranularity]="setUp.rightAxisGranularityProperty"
+            [xAxisLineColor]="setUp.xAxisLineColor" [leftAxisLineColor]="setUp.leftAxisLineColor" [rightAxisLineColor]="setUp.rightAxisLineColor"
+            [xAxisTextColor]="setUp.xAxisTextColor" [leftAxisTextColor]="setUp.leftAxisTextColor" [rightAxisTextColor]="setUp.rightAxisTextColor"
+            [xAxisMinValue]="setUp.xAxisMinValue" [leftAxisMinValue]="setUp.leftAxisMinValue" [rightAxisMinValue]="setUp.rightAxisMinValue"
+            [leftAxisMaxValue]="setUp.leftAxisMaxValue" [rightAxisMaxValue]="setUp.rightAxisMaxValue" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
+            [leftAxisFormatter]="leftAxisFormatter" [rightAxisFormatter]="rightAxisFormatter" [items]="dataSet" [labels]="labels"
+            [font]="setUp.font" class="mp-chart"></MPLineChart>
+    </StackLayout>
 ```
 ```css
 /*app.css*/
 .mp-chart {
-   description-text-color: #00ff00;
+    description-text-color: #00ff00;
+    x-axis-line-color: #ff0000;
+    left-axis-line-color: #005500;
+    right-axis-line-color: #ff00ff;
+    x-axis-text-color: #ff0000;
+    left-axis-text-color: #005500;
+    right-axis-text-color: #ff00ff;
 }
 ```
 ```ts
 // app.component.ts
 import { Component } from "@angular/core";
-import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface } from "nativescript-mpchart";
+import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface,YAxisFormatterInterface } from "nativescript-mpchart";
 
 @Component({
     selector: "ns-app",
@@ -131,10 +157,10 @@ import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface } from
 
 export class AppComponent {
 
-    public setUp = {
+    public setUp: any = {
         showGridLines: false,
-        showLegend: false,
-        scaleEnable: false,
+        showLegend: true,
+        scaleEnable: true,
         descriptionText: "Text for chart",
         descriptionXOffset: 0,
         descriptionYOffset: 0,
@@ -142,8 +168,35 @@ export class AppComponent {
         highlightPerTapEnabled: true,
         highlightPerDragEnabled: true,
         xAxisGranularityProperty: 1,
-        yAxisGranularityProperty: 40,
-        xAxisLabelPosition: "Bottom"
+        leftAxisGranularityProperty: 20,
+        rightAxisGranularityProperty: 30,
+        xAxisLineColor: "#ff0000",
+        xAxisTextColor: "#ff0000",
+
+        leftAxisLineColor: "#ff0000",
+        leftAxisTextColor: "#ff0000",
+
+        rightAxisLineColor: "#00ff00",
+        rightAxisTextColor: "#00ff00",
+
+        xAxisMinValue: 1,
+        xAxisMaxValue: 7,
+
+        leftAxisMinValue: 9,
+        leftAxisMaxValue: 100,
+
+        rightAxisMinValue: 9,
+        rightAxisMaxValue: 70,
+
+        font: "Papyrus",
+        xAxisLabelPosition: "Bottom",
+    };
+    public leftAxisFormatter: YAxisFormatterInterface = {
+        type: "Float",
+        numberOfDigits: 1
+    };
+    public rightAxisFormatter: YAxisFormatterInterface = {
+        type: "Int"
     };
     public dataSet: Array<DataChartInterface>;
     public labels: Array<DataSetLabelInterface>;
