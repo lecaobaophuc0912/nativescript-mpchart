@@ -36,16 +36,16 @@ import {
     rightAxisFormatterProperty,
     itemsProperty,
     labelsProperty,
-    DataChartInterface,
+    DataBarChartInterface,
     DataSetChartInterface,
     DataSetLabelInterface,
     YAxisFormatterInterface
-} from "./nativescript-mpchart.common";
+} from "../nativescript-mpchart.common";
 import { Color } from "tns-core-modules/color";
-var LineChart = com.github.mikephil.charting.charts.LineChart;
-var LineDataSet = com.github.mikephil.charting.data.LineDataSet;
-var LineData = com.github.mikephil.charting.data.LineData;
-var Entry = com.github.mikephil.charting.data.Entry;
+var BarChart = com.github.mikephil.charting.charts.BarChart;
+var BarDataSet = com.github.mikephil.charting.data.BarDataSet;
+var BarData = com.github.mikephil.charting.data.BarData;
+var BarEntry = com.github.mikephil.charting.data.BarEntry;
 var ArrayList = java.util.ArrayList;
 var XAxis = com.github.mikephil.charting.components.XAxis;
 var IndexAxisValueFormatter = com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
@@ -54,18 +54,16 @@ var IAxisValueFormatter = com.github.mikephil.charting.formatter.IAxisValueForma
 var Description = com.github.mikephil.charting.components.Description;
 var IValueFormatter = com.github.mikephil.charting.formatter.IValueFormatter;
 
-
-
-export class MPLineChart extends MPChartBase {
-    public nativeView: com.github.mikephil.charting.charts.LineChart;
+export class MPBarChart extends MPChartBase {
+    public nativeView: com.github.mikephil.charting.charts.BarChart;
     public resetZoomLineChart() {
         this.nativeView.resetZoom();
     }
     public createNativeView() {
-        var lineChartView = new LineChart(this._context);
-        var xAxis = lineChartView.getXAxis();
-        var yAxisLeft = lineChartView.getAxisLeft();
-        var yAxisRight = lineChartView.getAxisRight();
+        var barChartView = new BarChart(this._context);
+        var xAxis = barChartView.getXAxis();
+        var yAxisLeft = barChartView.getAxisLeft();
+        var yAxisRight = barChartView.getAxisRight();
         xAxis.setDrawGridLines(false);
         yAxisLeft.setDrawGridLines(false);
         yAxisRight.setDrawGridLines(false);
@@ -74,49 +72,41 @@ export class MPLineChart extends MPChartBase {
         yAxisLeft.setDrawGridLines(false);
         yAxisRight.setDrawGridLines(false);
 
+        xAxis.setAxisMinimum(0);
+        yAxisLeft.setAxisMinimum(0);
+        yAxisRight.setAxisMinimum(0);
         yAxisLeft.setDrawLabels(true);
         yAxisRight.setDrawLabels(true);
         var description = new Description();
-        lineChartView.setDescription(description);
-        lineChartView.setDoubleTapToZoomEnabled(false);
-
-        return lineChartView;
+        barChartView.setDescription(description);
+        barChartView.setDoubleTapToZoomEnabled(false);
+        barChartView.setFitBars(true);
+        return barChartView;
     }
-    public [itemsProperty.setNative](items: Array<DataChartInterface>) {
-        var lineDatasets: java.util.ArrayList<any> = new ArrayList();
+
+    public [itemsProperty.setNative](items: Array<DataBarChartInterface>) {
+        var barDatasets: java.util.ArrayList<any> = new ArrayList();
         for (let i = 0; i < items.length; i++) {
             if (items[i].dataSet && items[i].dataSet.length) {
                 let labelLegend = items[i].legendLabel ? items[i].legendLabel : "";
                 let entries = [];
                 for (let j = 0; j < items[i].dataSet.length; j++) {
-                    let entrie = new Entry(items[i].dataSet[j].x, items[i].dataSet[j].y);
+                    let entrie = new BarEntry(items[i].dataSet[j].x, items[i].dataSet[j].y);
                     entries.push(entrie);
                 }
                 if (entries.length) {
-                    let dataset: com.github.mikephil.charting.data.LineDataSet = new LineDataSet(new ArrayList(java.util.Arrays.asList(entries)), labelLegend);
-                    dataset.setColor(items[i].lineColor.android);
-                    let drawCircle = items[i].circleHoleEnabled ? !!items[i].circleHoleEnabled : false
-                    dataset.setDrawCircleHole(drawCircle);
-                    if (items[i].circleColor) {
-                        dataset.setCircleColor(items[i].circleColor.android);
-                    }
-                    dataset.setCircleHoleRadius(3);
-                    let circleEnable = items[i].circleEnable ? !!items[i].circleEnable : false
-                    dataset.setHighlightEnabled(false);
-
-                    if (items[i].highlighColor) {
-                        dataset.setHighLightColor(items[i].highlighColor.android);
-                    }
-                    lineDatasets.add(dataset);
-
+                    let dataset: com.github.mikephil.charting.data.BarDataSet = new BarDataSet(new ArrayList(java.util.Arrays.asList(entries)), labelLegend);
+                    dataset.setColor(items[i].barColor.android);
+                    dataset.setHighLightColor(items[i].highlighColor.android);
+                    barDatasets.add(dataset);
                 }
             }
             else {
                 throw new Error("items number " + i + "do not have any item");
             }
         }
-        let lineChartData = new LineData(lineDatasets);
-        this.nativeView.setData(lineChartData);
+        let barChartData = new BarData(barDatasets);
+        this.nativeView.setData(barChartData);
     }
 
     public [labelsProperty.setNative](labels: Array<DataSetLabelInterface>) {
@@ -142,6 +132,7 @@ export class MPLineChart extends MPChartBase {
             throw new Error("labels value undefined");
         }
     }
+
     public [showLegendProperty.setNative](value: boolean) {
         let legend = this.nativeView.getLegend();
         console.log("showLegend ", value);
@@ -532,15 +523,4 @@ export class MPLineChart extends MPChartBase {
             }
         }
     }
-
 }
-
-
-    // RangeSeekbarChangeListener END
-
-    // RangeSeekbarFinalValueListener START
-
-
-
-
-// RangeSeekbarFinalValueListener END

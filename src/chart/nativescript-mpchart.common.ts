@@ -22,7 +22,7 @@ export interface YAxisFormatterInterface {
     numberOfDigits?: number
 }
 
-export interface DataChartInterface {
+export interface DataLineChartInterface {
     dataSet: Array<DataSetChartInterface>;
     lineColor: Color;
     highlighColor?: Color;
@@ -31,13 +31,20 @@ export interface DataChartInterface {
     circleEnable?: boolean;
     legendLabel?: string;
 }
+
+export interface DataBarChartInterface {
+    dataSet: Array<DataSetChartInterface>;
+    legendLabel?: string;
+    highlighColor?: Color,
+    barColor?: Color;
+}
 // Type
 export type XAxisLabelPosition = "Top" | "Bottom" | "BothSided" | "TopInside" | "BottomInside";
 export type TypeFormatter = "Int" | "Float"
 
 // Property
 
-export const itemsProperty = new Property<MPChartBase, Array<DataChartInterface>>({
+export const itemsProperty = new Property<MPChartBase, Array<DataLineChartInterface>>({
     name: "items"
 });
 itemsProperty.register(MPChartBase);

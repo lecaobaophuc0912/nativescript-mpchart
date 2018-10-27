@@ -1,2 +1,1 @@
-export * from "./nativescript-mpchart";
-export * from "./nativescript-mpchart.common";
+export * from "./chart";

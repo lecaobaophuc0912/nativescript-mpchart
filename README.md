@@ -62,7 +62,7 @@ WATCH DETAIL IN DEMO.
 Method will reset chart. Call it if some property is change but not apply in UI.
 
 ### Data setup Properties
-* **items** - *Array<DataChartInterface>*
+* **items** - *Array<DataLineChartInterface>*
 set Items to render chart. This is important. See more in demo and demo-ng (app.component).
 * **labels** - *Array<DataSetLabelInterface>*
 set list value will display in xAxis because default is show x value. A property will convert to value you want display. This is important. See more in demo and demo-ng (app.component).
@@ -80,7 +80,7 @@ DataSetLabelInterface {
     label: string
 }
 
-DataChartInterface {
+DataLineChartInterface {
     dataSet: Array<DataSetChartInterface>;
     lineColor: Color;
     highlighColor?: Color;
@@ -93,6 +93,12 @@ DataChartInterface {
 YAxisFormatterInterface {
     type: TypeFormatter,
     numberOfDigits?: number
+}
+DataBarChartInterface {
+    dataSet: Array<DataSetChartInterface>;
+    legendLabel?: string;
+    highlighColor?: Color,
+    barColor?: Color;
 }
 ```
 
@@ -120,6 +126,7 @@ to full in parent layout.
 
 ```html
 <!-- app.component.html -->
+    <!-- line chart -->
     <StackLayout height="500">
         <MPLineChart *ngIf="dataSet" #lineChart [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
             [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset"
@@ -132,6 +139,19 @@ to full in parent layout.
             [leftAxisFormatter]="leftAxisFormatter" [rightAxisFormatter]="rightAxisFormatter" [items]="dataSet" [labels]="labels"
             [font]="setUp.font" class="mp-chart"></MPLineChart>
     </StackLayout>
+    <!-- bar chart -->
+     <StackLayout height="500">
+        <MPBarChart height="400" #lineChart *ngIf="barDataSet" [items]="barDataSet" [labels]="labels" [showLegend]="setUp.showLegend"
+            [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable" [descriptionText]="setUp.descriptionText"
+            [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset" [descriptionTextColor]="setUp.descriptionTextColor"
+            [xAxisGranularity]="setUp.xAxisGranularityProperty" [leftAxisGranularity]="setUp.leftAxisGranularityProperty" [rightAxisGranularity]="setUp.rightAxisGranularityProperty"
+            [xAxisLineColor]="setUp.xAxisLineColor" [leftAxisLineColor]="setUp.leftAxisLineColor" [rightAxisLineColor]="setUp.rightAxisLineColor"
+            [xAxisTextColor]="setUp.xAxisTextColor" [leftAxisTextColor]="setUp.leftAxisTextColor" [rightAxisTextColor]="setUp.rightAxisTextColor"
+            [xAxisMinValue]="setUp.xAxisMinValue" [leftAxisMinValue]="setUp.leftAxisMinValue" [rightAxisMinValue]="setUp.rightAxisMinValue"
+            [leftAxisMaxValue]="setUp.leftAxisMaxValue" [rightAxisMaxValue]="setUp.rightAxisMaxValue" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
+            [leftAxisFormatter]="leftAxisFormatter" [rightAxisFormatter]="rightAxisFormatter" [font]="setUp.font" class="mp-chart"></MPBarChart>
+    </StackLayout>
+
 ```
 ```css
 /*app.css*/
@@ -148,7 +168,7 @@ to full in parent layout.
 ```ts
 // app.component.ts
 import { Component } from "@angular/core";
-import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface,YAxisFormatterInterface } from "nativescript-mpchart";
+import { DataLineChartInterface, DataSetChartInterface, DataSetLabelInterface,YAxisFormatterInterface } from "nativescript-mpchart";
 
 @Component({
     selector: "ns-app",
@@ -198,30 +218,52 @@ export class AppComponent {
     public rightAxisFormatter: YAxisFormatterInterface = {
         type: "Int"
     };
-    public dataSet: Array<DataChartInterface>;
+    public dataSet: Array<DataLineChartInterface>;
+    public barDataSet: Array<DataBarChartInterface>;
     public labels: Array<DataSetLabelInterface>;
     constructor() { 
-        let arrDataView1: Array<DataSetChartInterface> = [];
+       let cyan = new Color("#00FFFF");
         let color = new Color("#FF0000");
-
+        let color1 = new Color("#00FF00");
+        let arrDataView1: Array<DataSetChartInterface> = [];
+        let arrDataView2: Array<DataSetChartInterface> = [];
+        let arrLabel: Array<DataSetLabelInterface> = [];
+        let arrDataView: Array<DataSetChartInterface> = [];
         for (let i = 0; i < 8; i++) {
             arrDataView1.push({
-                x: i,      // this is value in xAxis
-                y: i * 3,  // this is value in yAxis
+                x: i,
+                y: i * 9,
+            });
+            arrDataView2.push({
+                x: i,
+                y: i + 30,
             });
             arrLabel.push({
-                xAxisValue: i, // THIS IS IMPORTANT.  xAxisValue must be equal value in xAxis. In case it is "i".
+                xAxisValue: i,
                 label: `Tháng ` + (i + 1)
             })
-
         }
-        let item: DataChartInterface = {
+        let item: DataLineChartInterface = {
             dataSet: arrDataView1,
-            lineColor: color,
+            lineColor: cyan,
             highlighColor: color,
-            legendLabel: "Legend text arrDataView1"
+            legendLabel: "arrDataView1"
         };
+        let item1: DataLineChartInterface = {
+            dataSet: arrDataView2,
+            lineColor: color1,
+            highlighColor: color,
+        };
+        this.dataSet = [];
         this.dataSet.push(item);
+        this.dataSet.push(item1);
+        this.barDataSet = [];
+        this.barDataSet.push({
+            dataSet: arrDataView1,
+            legendLabel: "barChartView1",
+            highlighColor: color,
+            barColor: color1
+        });
         this.labels = arrLabel;
     }
 }
