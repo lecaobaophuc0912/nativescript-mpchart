@@ -37,11 +37,11 @@ import {
     fontProperty,
     itemsProperty,
     labelsProperty,
-    DataChartInterface,
+    DataLineChartInterface,
     DataSetChartInterface,
     DataSetLabelInterface,
     YAxisFormatterInterface,
-} from "./nativescript-mpchart.common";
+} from "../nativescript-mpchart.common";
 import { Color } from "tns-core-modules/color";
 import { layout } from "tns-core-modules/utils/utils";
 
@@ -63,6 +63,7 @@ export class MPLineChart extends MPChartBase {
         lineChartView.xAxis.axisMinimum = 0;
         lineChartView.leftAxis.axisMinimum = 0;
         lineChartView.rightAxis.axisMinimum = 0;
+        lineChartView.doubleTapToZoomEnabled = false;
         return lineChartView;
     }
 
@@ -75,7 +76,7 @@ export class MPLineChart extends MPChartBase {
     public resetZoomLineChart() {
         this.nativeView.resetZoom();
     }
-    public [itemsProperty.setNative](items: Array<DataChartInterface>) {
+    public [itemsProperty.setNative](items: Array<DataLineChartInterface>) {
         let lineChartData = LineChartData.new();
         console.log("items length", items.length);
         for (let i = 0; i < items.length; i++) {

@@ -1,6 +1,6 @@
 import { Observable } from 'tns-core-modules/data/observable';
 import { Color } from "tns-core-modules/color/color";
-import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface } from "nativescript-mpchart";
+import { DataLineChartInterface, DataSetChartInterface, DataSetLabelInterface } from "nativescript-mpchart";
 export class HelloWorldModel extends Observable {
     public setUp: any = {
         showGridLines: false,
@@ -16,7 +16,7 @@ export class HelloWorldModel extends Observable {
         yAxisGranularityProperty: 40,
         xAxisLabelPosition: "Bottom"
     };
-    public dataSet: Array<DataChartInterface>;
+    public dataSet: Array<DataLineChartInterface>;
     public labels: Array<DataSetLabelInterface>;
     constructor() {
         super();
@@ -43,13 +43,13 @@ export class HelloWorldModel extends Observable {
             })
 
         }
-        let item: DataChartInterface = {
+        let item: DataLineChartInterface = {
             dataSet: arrDataView1,
             lineColor: cyan,
             highlighColor: color,
             legendLabel: "arrDataView1"
         };
-        let item1: DataChartInterface = {
+        let item1: DataLineChartInterface = {
             dataSet: arrDataView2,
             lineColor: color1,
             highlighColor: color,

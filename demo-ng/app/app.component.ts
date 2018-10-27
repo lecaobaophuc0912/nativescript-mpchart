@@ -1,7 +1,8 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Self } from "@angular/core";
 import { Color } from "tns-core-modules/color/color";
-import { DataChartInterface, DataSetChartInterface, DataSetLabelInterface, YAxisFormatterInterface } from "nativescript-mpchart";
+import { DataLineChartInterface, DataBarChartInterface, DataSetChartInterface, DataSetLabelInterface, YAxisFormatterInterface } from "nativescript-mpchart";
 declare var UIFont: any;
+declare var BarChartData: any;
 @Component({
     selector: "ns-app",
     moduleId: module.id,
@@ -27,19 +28,19 @@ export class AppComponent {
         xAxisLineColor: "#ff0000",
         xAxisTextColor: "#ff0000",
 
-        leftAxisLineColor: "#ff0000",
-        leftAxisTextColor: "#ff0000",
+        leftAxisLineColor: "#0000ff",
+        leftAxisTextColor: "#0000ff",
 
         rightAxisLineColor: "#00ff00",
         rightAxisTextColor: "#00ff00",
 
-        xAxisMinValue: 1,
-        xAxisMaxValue: 7,
+        xAxisMinValue: -1,
+        xAxisMaxValue: 4,
 
-        leftAxisMinValue: 9,
+        leftAxisMinValue: 0,
         leftAxisMaxValue: 100,
 
-        rightAxisMinValue: 9,
+        rightAxisMinValue: 0,
         rightAxisMaxValue: 70,
 
         font: "Papyrus",
@@ -53,7 +54,8 @@ export class AppComponent {
         type: "Float",
         numberOfDigits: 1
     };
-    public dataSet: Array<DataChartInterface>;
+    public dataSet: Array<DataLineChartInterface>;
+    public barDataSet: Array<DataBarChartInterface>;
     public labels: Array<DataSetLabelInterface>;
     constructor(
         public changeDetectorRef: ChangeDetectorRef
@@ -64,6 +66,7 @@ export class AppComponent {
         let arrDataView1: Array<DataSetChartInterface> = [];
         let arrDataView2: Array<DataSetChartInterface> = [];
         let arrLabel: Array<DataSetLabelInterface> = [];
+        let arrDataView: Array<DataSetChartInterface> = [];
         for (let i = 0; i < 8; i++) {
             arrDataView1.push({
                 x: i,
@@ -71,7 +74,7 @@ export class AppComponent {
             });
             arrDataView2.push({
                 x: i,
-                y: i + 10,
+                y: i + 30,
             });
 
             arrLabel.push({
@@ -80,13 +83,13 @@ export class AppComponent {
             })
 
         }
-        let item: DataChartInterface = {
+        let item: DataLineChartInterface = {
             dataSet: arrDataView1,
             lineColor: cyan,
             highlighColor: color,
             legendLabel: "arrDataView1"
         };
-        let item1: DataChartInterface = {
+        let item1: DataLineChartInterface = {
             dataSet: arrDataView2,
             lineColor: color1,
             highlighColor: color,
@@ -94,6 +97,19 @@ export class AppComponent {
         this.dataSet = [];
         this.dataSet.push(item);
         this.dataSet.push(item1);
+        this.barDataSet = [];
+        this.barDataSet.push({
+            dataSet: arrDataView1,
+            legendLabel: "barChartView1",
+            highlighColor: color,
+            barColor: color1
+        });
+        // this.barDataSet.push({
+        //     dataSet: arrDataView2,
+        //     legendLabel: "barChartView2",
+        //     highlighColor: color,
+        //     barColor: cyan
+        // });
         this.labels = arrLabel;
     }
 
@@ -107,6 +123,7 @@ export class AppComponent {
     }
 
     onTap(args) {
+
         this.leftAxisFormatter = {
             type: "Float",
             numberOfDigits: 2
@@ -170,14 +187,14 @@ export class AppComponent {
         //         })
 
         //     }
-        //     let item: DataChartInterface = {
+        //     let item: DataLineChartInterface = {
         //         dataSet: arrDataView1,
         //         lineColor: cyan,
         //         highlighColor: color,
         //         circleColor: color,
         //         legendLabel: "arrDataView1"
         //     };
-        //     let item1: DataChartInterface = {
+        //     let item1: DataLineChartInterface = {
         //         dataSet: arrDataView2,
         //         lineColor: color1,
         //         highlighColor: color,
@@ -186,7 +203,7 @@ export class AppComponent {
         //     this.dataSet.push(item);
         //     // this.dataSet.push(item1);
         //     this.labels = arrLabel;
-        this.lineChart.nativeElement.resetZoomLineChart();
+        // this.lineChart.nativeElement.resetZoomLineChart();
         //     this.changeDetectorRef.detectChanges();
     }
 
@@ -224,10 +241,10 @@ export class AppComponent {
             xAxisMinValue: 0,
             xAxisMaxValue: 6,
 
-            leftAxisMinValue: 0,
+            leftAxisMinValue: 9,
             leftAxisMaxValue: 50,
 
-            rightAxisMinValue: 0,
+            rightAxisMinValue: 9,
             rightAxisMaxValue: 80,
         };
         // this.setUp = {
@@ -256,7 +273,7 @@ export class AppComponent {
         let arrLabel: Array<DataSetLabelInterface> = [];
         console.log("color1 -09-0-0-0-0-0-0-0-- ", color1);
 
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < 8; i++) {
             arrDataView1.push({
                 x: i,
                 y: i * 9,
@@ -272,13 +289,13 @@ export class AppComponent {
             })
 
         }
-        let item: DataChartInterface = {
+        let item: DataLineChartInterface = {
             dataSet: arrDataView1,
             lineColor: cyan,
             highlighColor: color,
             legendLabel: "arrDataView1"
         };
-        let item1: DataChartInterface = {
+        let item1: DataLineChartInterface = {
             dataSet: arrDataView2,
             lineColor: color1,
             highlighColor: color,
@@ -307,6 +324,27 @@ export class AppComponent {
         this.lineChart.nativeElement.ios.leftAxis.labelFont = UIFont.fontWithNameSize("Papyrus", this.lineChart.nativeElement.ios.xAxis.labelFont.pointSize);
         console.log("onTapFont ", this.lineChart.nativeElement.ios.leftAxis.labelFont.fontName);
         this.lineChart.nativeElement.resetZoomLineChart();
+    }
+
+    onTapTest() {
+        // let barChartView = BarChartView.new();
+        // let barChartData = BarChartData.new();
+        // let entries: NSMutableArray<any> = NSMutableArray.new();
+        // let entrie = BarChartDataEntry.alloc().initWithXY(0, 1);
+        // entries.addObject(entrie);
+        // let dataset: BarChartDataSet = BarChartDataSet.alloc().initWithValuesLabel(entries, "labelLegend");
+        // try {
+        //     console.log('before');
+        //     barChartData.addDataSet(dataset);
+        //     this.lineChart.nativeElement.ios.barChartData = barChartData;
+        //     this.lineChart.nativeElement.ios.setData();
+        //     console.log('after');
+        // }
+        // catch (ex) {
+        //     console.log("ex ", ex);
+        // }
+
+        // console.log("onTapTest");
     }
 }
 
