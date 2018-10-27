@@ -1,6 +1,6 @@
 {
     "name": "nativescript-mpchart",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "NativeScript MPChart",
     "main": "nativescript-mpchart",
     "typings": "index.d.ts",
