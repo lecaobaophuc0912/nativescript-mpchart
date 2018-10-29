@@ -35,6 +35,9 @@ import {
     leftAxisFormatterProperty,
     rightAxisFormatterProperty,
     fontProperty,
+    showValueLabelsProperty,
+    showLeftAxisProperty,
+    showRightAxisProperty,
     itemsProperty,
     labelsProperty,
     DataBarChartInterface,
@@ -47,6 +50,7 @@ import { layout } from "tns-core-modules/utils/utils";
 
 export class MPBarChart extends MPChartBase {
     nativeView: BarChartView;
+    private showValueLabels: boolean;
     public createNativeView() {
         let barChartView = BarChartView.new();
         // set some default value of chart when init view
@@ -57,6 +61,8 @@ export class MPBarChart extends MPChartBase {
         barChartView.xAxis.drawGridLinesEnabled = false;
         barChartView.leftAxis.drawGridLinesEnabled = false;
         barChartView.rightAxis.drawGridLinesEnabled = false;
+        barChartView.leftAxis.enabled = false;
+        barChartView.rightAxis.enabled = false;
         // barChartView.highlightPerDragEnabled = false;
         // barChartView.highlightPerTapEnabled = false;
 
@@ -64,6 +70,7 @@ export class MPBarChart extends MPChartBase {
         barChartView.leftAxis.axisMinimum = 0;
         barChartView.rightAxis.axisMinimum = 0;
         barChartView.doubleTapToZoomEnabled = false;
+        barChartView.fitBars = true;
         return barChartView;
     }
 
@@ -85,12 +92,19 @@ export class MPBarChart extends MPChartBase {
                 let entries: NSMutableArray<any> = NSMutableArray.new();
                 for (let j = 0; j < items[i].dataSet.length; j++) {
                     let entrie = BarChartDataEntry.new().initWithXY(items[i].dataSet[j].x, items[i].dataSet[j].y);
+
                     entries.addObject(entrie);
                 }
                 let dataset: BarChartDataSet = BarChartDataSet.alloc().initWithValuesLabel(entries, labelLegend);
                 dataset.setColor(items[i].barColor.ios);
                 dataset.highlightColor = items[i].highlighColor.ios;
                 dataset.highlightEnabled = true;
+                if (this.showValueLabels != undefined) {
+                    dataset.drawValuesEnabled = this.showValueLabels;
+                }
+                else {
+                    dataset.drawValuesEnabled = true;
+                }
                 barChartData.addDataSet(dataset);
             }
             else {
@@ -554,5 +568,41 @@ export class MPBarChart extends MPChartBase {
             throw new Error("xAxisFontProperty Font " + fontName + " Do not exist");
         }
     }
+    public [showValueLabelsProperty.getDefault](): boolean {
+        return true;
+    }
 
+    public [showValueLabelsProperty.setNative](value: boolean) {
+        this.showValueLabels = value;
+        if (this.nativeView.data) {
+            let dataSets = this.nativeView.data.dataSets;
+            if (dataSets) {
+                for (let i = 0; i < dataSets.count; i++) {
+                    dataSets[i].drawValuesEnabled = value;
+                }
+            }
+        }
+    }
+
+    public [showLeftAxisProperty.setNative](value: boolean) {
+        let leftAxis: ChartYAxis;
+        leftAxis = this.nativeView.leftAxis;
+        if (leftAxis) {
+            leftAxis.enabled = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' in showLeftAxisProperty of Chart undefined");
+        }
+    }
+
+    public [showRightAxisProperty.setNative](value: boolean) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis) {
+            rightAxis.enabled = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' in showRightAxisProperty of Chart undefined");
+        }
+    }
 }

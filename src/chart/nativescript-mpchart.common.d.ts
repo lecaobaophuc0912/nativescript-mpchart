@@ -70,3 +70,6 @@ export declare const rightAxisMaxValueProperty: Property<MPChartBase, number>;
 export declare const leftAxisFormatterProperty: Property<MPChartBase, YAxisFormatterInterface>;
 export declare const rightAxisFormatterProperty: Property<MPChartBase, YAxisFormatterInterface>;
 export declare const fontProperty: Property<MPChartBase, string>;
+export declare const showValueLabelsProperty: Property<MPChartBase, boolean>;
+export declare const showLeftAxisProperty: Property<MPChartBase, boolean>;
+export declare const showRightAxisProperty: Property<MPChartBase, boolean>;

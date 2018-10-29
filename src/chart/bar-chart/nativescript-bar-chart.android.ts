@@ -34,6 +34,9 @@ import {
     rightAxisMaxValueProperty,
     leftAxisFormatterProperty,
     rightAxisFormatterProperty,
+    showValueLabelsProperty,
+    showLeftAxisProperty,
+    showRightAxisProperty,
     itemsProperty,
     labelsProperty,
     DataBarChartInterface,
@@ -56,6 +59,7 @@ var IValueFormatter = com.github.mikephil.charting.formatter.IValueFormatter;
 
 export class MPBarChart extends MPChartBase {
     public nativeView: com.github.mikephil.charting.charts.BarChart;
+    private showValueLabels: boolean;
     public resetZoomLineChart() {
         this.nativeView.resetZoom();
     }
@@ -77,6 +81,8 @@ export class MPBarChart extends MPChartBase {
         yAxisRight.setAxisMinimum(0);
         yAxisLeft.setDrawLabels(true);
         yAxisRight.setDrawLabels(true);
+        yAxisLeft.setEnabled(true);
+        yAxisRight.setEnabled(true);
         var description = new Description();
         description.setText("");
         barChartView.setDescription(description);
@@ -99,6 +105,12 @@ export class MPBarChart extends MPChartBase {
                     let dataset: com.github.mikephil.charting.data.BarDataSet = new BarDataSet(new ArrayList(java.util.Arrays.asList(entries)), labelLegend);
                     dataset.setColor(items[i].barColor.android);
                     dataset.setHighLightColor(items[i].highlighColor.android);
+                    if (this.showValueLabels != undefined) {
+                        dataset.setDrawValues(this.showValueLabels);
+                    }
+                    else {
+                        dataset.setDrawValues(true);
+                    }
                     barDatasets.add(dataset);
                 }
             }
@@ -522,6 +534,44 @@ export class MPBarChart extends MPChartBase {
                 default:
                     break;
             }
+        }
+    }
+
+    public [showValueLabelsProperty.getDefault](): boolean {
+        return true;
+    }
+
+    public [showValueLabelsProperty.setNative](value: boolean) {
+        this.showValueLabels = value;
+        if (this.nativeView.getData()) {
+            let dataSets = this.nativeView.getData().getDataSets();
+            if (dataSets) {
+                for (let i = 0; i < dataSets.size(); i++) {
+                    this.nativeView.getData().getDataSets().get(i).setDrawValues(value);
+                }
+            }
+        }
+    }
+
+    public [showLeftAxisProperty.setNative](value: boolean) {
+        let leftAxis: com.github.mikephil.charting.components.YAxis;
+        leftAxis = this.nativeView.getAxisLeft();
+        if (leftAxis) {
+            leftAxis.setEnabled(value);
+        }
+        else {
+            throw new Error("Property  'xAxis' in showLeftAxisProperty of Chart undefined");
+        }
+    }
+
+    public [showRightAxisProperty.setNative](value: boolean) {
+        let rightAxis: com.github.mikephil.charting.components.YAxis;
+        rightAxis = this.nativeView.getAxisRight();
+        if (rightAxis) {
+            rightAxis.setEnabled(value);
+        }
+        else {
+            throw new Error("Property  'xAxis' in showRightAxisProperty of Chart undefined");
         }
     }
 }

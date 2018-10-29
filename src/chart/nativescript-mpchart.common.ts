@@ -461,3 +461,23 @@ export const fontProperty = new Property<MPChartBase, string>({
 });
 fontProperty.register(MPChartBase);
 
+export const showValueLabelsProperty = new Property<MPChartBase, boolean>({
+    name: "showValueLabels",
+    defaultValue: false,
+    valueConverter: booleanConverter
+});
+showValueLabelsProperty.register(MPChartBase);
+
+export const showLeftAxisProperty = new Property<MPChartBase, boolean>({
+    name: "showLeftAxis",
+    defaultValue: false,
+    valueConverter: booleanConverter
+});
+showLeftAxisProperty.register(MPChartBase);
+
+export const showRightAxisProperty = new Property<MPChartBase, boolean>({
+    name: "showRightAxis",
+    defaultValue: false,
+    valueConverter: booleanConverter
+});
+showRightAxisProperty.register(MPChartBase);

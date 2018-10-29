@@ -19,7 +19,7 @@ export class AppComponent {
         descriptionText: "Text for chart",
         descriptionXOffset: 0,
         descriptionYOffset: 0,
-        descriptionTextColor: "#ffff00",
+        descriptionTextColor: "#ff0000",
         highlightPerTapEnabled: true,
         highlightPerDragEnabled: true,
         xAxisGranularityProperty: 1,
@@ -35,7 +35,7 @@ export class AppComponent {
         rightAxisTextColor: "#00ff00",
 
         xAxisMinValue: -1,
-        xAxisMaxValue: 4,
+        xAxisMaxValue: 3,
 
         leftAxisMinValue: 0,
         leftAxisMaxValue: 100,
@@ -44,6 +44,9 @@ export class AppComponent {
         rightAxisMaxValue: 70,
 
         font: "Papyrus",
+        showValueLabels: false,
+        showLeftAxis: true,
+        showRightAxis: true,
         xAxisLabelPosition: "Bottom",
     };
     public leftAxisFormatter: YAxisFormatterInterface = {
@@ -154,7 +157,9 @@ export class AppComponent {
             this.setUp.rightAxisLineColor = "#0000ff",
             this.setUp.rightAxisTextColor = "#0000ff",
             this.setUp.xAxisLabelPosition = "Bottom";
-
+        this.setUp.showValueLabels = !this.setUp.showValueLabels;
+        this.setUp.showLeftAxis = !this.setUp.showLeftAxis;
+        this.setUp.showRightAxis = !this.setUp.showRightAxis;
         this.setUp.xAxisMinValue = 1;
         this.setUp.xAxisMaxValue = 7;
 
@@ -170,6 +175,7 @@ export class AppComponent {
         let arrDataView1: Array<DataSetChartInterface> = [];
         let arrDataView2: Array<DataSetChartInterface> = [];
         let arrLabel: Array<DataSetLabelInterface> = [];
+        // console.log("onTap -0-0-0-0 ", this.lineChart.nativeElement.android.getData().getDataSets().get(0).setDrawValues(!this.setUp.showValueLabels));
         // this.lineChart.nativeElement.android.getAxisLeft().setAxisLineColor(color1.android);
         //     for (let i = 0; i < 9; i++) {
         //         arrDataView1.push({
@@ -203,7 +209,7 @@ export class AppComponent {
         //     this.dataSet.push(item);
         //     // this.dataSet.push(item1);
         //     this.labels = arrLabel;
-        // this.lineChart.nativeElement.resetZoomLineChart();
+        this.lineChart.nativeElement.resetZoomLineChart();
         //     this.changeDetectorRef.detectChanges();
     }
 
