@@ -51,6 +51,7 @@ export class MPBarChart extends MPChartBase {
         let barChartView = BarChartView.new();
         // set some default value of chart when init view
         let description: ChartDescription = ChartDescription.new();
+        description.text = "";
         barChartView.chartDescription = description;
         barChartView.xAxis.labelPosition = XAxisLabelPosition.Bottom;
         barChartView.xAxis.drawGridLinesEnabled = false;

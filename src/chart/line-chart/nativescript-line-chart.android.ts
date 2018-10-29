@@ -77,6 +77,7 @@ export class MPLineChart extends MPChartBase {
         yAxisLeft.setDrawLabels(true);
         yAxisRight.setDrawLabels(true);
         var description = new Description();
+        description.setText("");
         lineChartView.setDescription(description);
         lineChartView.setDoubleTapToZoomEnabled(false);
 

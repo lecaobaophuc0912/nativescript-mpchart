@@ -78,6 +78,7 @@ export class MPBarChart extends MPChartBase {
         yAxisLeft.setDrawLabels(true);
         yAxisRight.setDrawLabels(true);
         var description = new Description();
+        description.setText("");
         barChartView.setDescription(description);
         barChartView.setDoubleTapToZoomEnabled(false);
         barChartView.setFitBars(true);

@@ -52,6 +52,7 @@ export class MPLineChart extends MPChartBase {
         let lineChartView = LineChartView.new();
         // set some default value of chart when init view
         let description: ChartDescription = ChartDescription.new();
+        description.text = "";
         lineChartView.chartDescription = description;
         lineChartView.xAxis.labelPosition = XAxisLabelPosition.Bottom;
         lineChartView.xAxis.drawGridLinesEnabled = false;
