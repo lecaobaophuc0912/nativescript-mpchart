@@ -1,6 +1,7 @@
 import { View, Property } from "tns-core-modules/ui/core/view";
 import { Style, CssProperty } from "tns-core-modules/ui/text-base";
 import { Color } from "tns-core-modules/color";
+import { ChartMarkerConfig } from "../chart/custom-marker-view/custom-marker-view.common";
 export declare class MPChartBase extends View {
     resetZoomLineChart(): void;
 }
@@ -73,3 +74,4 @@ export declare const fontProperty: Property<MPChartBase, string>;
 export declare const showValueLabelsProperty: Property<MPChartBase, boolean>;
 export declare const showLeftAxisProperty: Property<MPChartBase, boolean>;
 export declare const showRightAxisProperty: Property<MPChartBase, boolean>;
+export declare const markerProperty: Property<MPChartBase, ChartMarkerConfig>;

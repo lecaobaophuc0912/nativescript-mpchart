@@ -1,7 +1,7 @@
 import { View, Property, EventData, booleanConverter } from "tns-core-modules/ui/core/view";
 import { Style, CssProperty } from "tns-core-modules/ui/text-base";
 import { Color } from "tns-core-modules/color";
-
+import { ChartMarkerConfig } from "../chart/custom-marker-view/custom-marker-view.common"
 
 export class MPChartBase extends View {
     public resetZoomLineChart() {
@@ -481,3 +481,8 @@ export const showRightAxisProperty = new Property<MPChartBase, boolean>({
     valueConverter: booleanConverter
 });
 showRightAxisProperty.register(MPChartBase);
+
+export const markerProperty = new Property<MPChartBase, ChartMarkerConfig>({
+    name: "marker",
+});
+markerProperty.register(MPChartBase);

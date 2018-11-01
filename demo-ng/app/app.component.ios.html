@@ -22,8 +22,11 @@
             [descriptionYOffset]="setUp.descriptionYOffset" [xAxisGranularity]="setUp.xAxisGranularityProperty" [leftAxisGranularity]="setUp.leftAxisGranularityProperty"
             [rightAxisGranularity]="setUp.rightAxisGranularityProperty" [xAxisLineColor]="setUp.xAxisLineColor" [leftAxisLineColor]="setUp.leftAxisLineColor"
             [rightAxisLineColor]="setUp.rightAxisLineColor" [xAxisTextColor]="setUp.xAxisTextColor" [leftAxisTextColor]="setUp.leftAxisTextColor"
-            [rightAxisTextColor]="setUp.rightAxisTextColor" [xAxisLabelPosition]="setUp.xAxisLabelPosition" [leftAxisFormatter]="leftAxisFormatter"
-            [rightAxisFormatter]="rightAxisFormatter" [font]="setUp.font" [showValueLabels]="setUp.showValueLabels" [showLeftAxis]="setUp.showLeftAxis"
-            [showRightAxis]="setUp.showRightAxis" class="mp-chart"></MPBarChart>
+            [font]="setUp.font" [showValueLabels]="setUp.showValueLabels" [showLeftAxis]="setUp.showLeftAxis" [showRightAxis]="setUp.showRightAxis"
+            [marker]="markerConfig" class="mp-chart"></MPBarChart>
+    </StackLayout>
+
+    <StackLayout #view width="100" height="50" backgroundColor="yellow">
+        <Label color="red" background="" text="Text" textWrap="true"></Label>
     </StackLayout>
     <!-- showValueLabels -->

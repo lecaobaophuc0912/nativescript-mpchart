@@ -1,8 +1,20 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Self } from "@angular/core";
 import { Color } from "tns-core-modules/color/color";
-import { DataLineChartInterface, DataBarChartInterface, DataSetChartInterface, DataSetLabelInterface, YAxisFormatterInterface } from "nativescript-mpchart";
-declare var UIFont: any;
+import {
+    DataLineChartInterface,
+    DataBarChartInterface,
+    DataSetChartInterface,
+    DataSetLabelInterface,
+    YAxisFormatterInterface,
+    rightAxisFormatterProperty,
+} from "nativescript-mpchart";
+import { ChartMarkerConfig, ChartMarkerSize, ConfigDisplayData } from "nativescript-mpchart/chart/custom-marker-view/custom-marker-view.common"
+import * as application from "application";
+import { Page } from "ui/page"
+// declare var UIFont: any;
 declare var BarChartData: any;
+declare var org: any;
+declare var UIEdgeInsetsMake: any;
 @Component({
     selector: "ns-app",
     moduleId: module.id,
@@ -11,6 +23,7 @@ declare var BarChartData: any;
 
 export class AppComponent {
     @ViewChild('lineChart') lineChart: ElementRef;
+    @ViewChild('view') view: ElementRef;
 
     public setUp: any = {
         showGridLines: false,
@@ -57,11 +70,13 @@ export class AppComponent {
         type: "Float",
         numberOfDigits: 1
     };
+
+    public markerConfig: ChartMarkerConfig;
     public dataSet: Array<DataLineChartInterface>;
     public barDataSet: Array<DataBarChartInterface>;
     public labels: Array<DataSetLabelInterface>;
     constructor(
-        public changeDetectorRef: ChangeDetectorRef
+        public changeDetectorRef: ChangeDetectorRef,
     ) {
         let cyan = new Color("#00FFFF");
         let color = new Color("#FF0000");
@@ -73,7 +88,7 @@ export class AppComponent {
         for (let i = 0; i < 8; i++) {
             arrDataView1.push({
                 x: i,
-                y: i * 9,
+                y: i * 9.3,
             });
             arrDataView2.push({
                 x: i,
@@ -114,6 +129,24 @@ export class AppComponent {
         //     barColor: cyan
         // });
         this.labels = arrLabel;
+        this.markerConfig = {
+            displayData: {
+                showXValue: false,
+                showYValue: true,
+                formatter: "Yvalue: {{y}}",
+            },
+            contentCenter: true,
+            xOffset: -30,
+            yOffset: -30,
+            backgroundColor: new Color("#0000ff"),
+            textColor: new Color("#ffffff"),
+            font: "Papyrus",
+            fontSize: 12,
+            padding: {
+                x: 20,
+                y: 10
+            }
+        }
     }
 
     ngOnInit() {
@@ -126,7 +159,6 @@ export class AppComponent {
     }
 
     onTap(args) {
-
         this.leftAxisFormatter = {
             type: "Float",
             numberOfDigits: 2
@@ -175,7 +207,11 @@ export class AppComponent {
         let arrDataView1: Array<DataSetChartInterface> = [];
         let arrDataView2: Array<DataSetChartInterface> = [];
         let arrLabel: Array<DataSetLabelInterface> = [];
-        // console.log("onTap -0-0-0-0 ", this.lineChart.nativeElement.android.getData().getDataSets().get(0).setDrawValues(!this.setUp.showValueLabels));
+
+
+        // let customChartMarkerView = new CustomChartMarkerView(application.android.context, packageName.R.layout.default_marker_view);
+        // customChartMarkerView.setConfig(this.markerConfig);
+        // this.lineChart.nativeElement.android.setMarker(customChartMarkerView);
         // this.lineChart.nativeElement.android.getAxisLeft().setAxisLineColor(color1.android);
         //     for (let i = 0; i < 9; i++) {
         //         arrDataView1.push({
