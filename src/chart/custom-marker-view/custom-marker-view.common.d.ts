@@ -27,7 +27,6 @@ export interface ChartMarkerConfig {
         y: number;
     };
     minimumSize?: ChartMarkerSize;
-    textAlignment?: TextAlignment;
     borderRadius?: number;
     contentCenter?: boolean;
     displayData: ConfigDisplayData;
@@ -35,4 +34,3 @@ export interface ChartMarkerConfig {
     yOffset?: number;
 }
 export declare type LabelPositionType = "leftOfValue" | "rightOfValue";
-export declare type TextAlignment = "Left" | "Right" | "Center";

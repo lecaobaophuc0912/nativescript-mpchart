@@ -1,13 +1,8 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Self } from "@angular/core";
 import { Color } from "tns-core-modules/color/color";
-import { DataLineChartInterface, DataBarChartInterface, DataSetChartInterface, DataSetLabelInterface, YAxisFormatterInterface} from "nativescript-mpchart";
-// import { ChartMarkerConfig, ChartMarkerSize, ConfigDisplayData } from "nativescript-mpchart/chart/custom-marker-view/custom-marker-view.common"
-import * as application from "application";
-import { Page } from "ui/page"
-// declare var UIFont: any;
+import { DataLineChartInterface, DataBarChartInterface, DataSetChartInterface, DataSetLabelInterface, YAxisFormatterInterface, ChartMarkerConfig } from "nativescript-mpchart/index";
+declare var UIFont: any;
 declare var BarChartData: any;
-declare var org: any;
-declare var UIEdgeInsetsMake: any;
 @Component({
     selector: "ns-app",
     moduleId: module.id,
@@ -16,7 +11,6 @@ declare var UIEdgeInsetsMake: any;
 
 export class AppComponent {
     @ViewChild('lineChart') lineChart: ElementRef;
-    @ViewChild('view') view: ElementRef;
 
     public setUp: any = {
         showGridLines: false,
@@ -25,7 +19,7 @@ export class AppComponent {
         descriptionText: "Text for chart",
         descriptionXOffset: 0,
         descriptionYOffset: 0,
-        descriptionTextColor: "#ff0000",
+        descriptionTextColor: "#ffff00",
         highlightPerTapEnabled: true,
         highlightPerDragEnabled: true,
         xAxisGranularityProperty: 1,
@@ -41,7 +35,7 @@ export class AppComponent {
         rightAxisTextColor: "#00ff00",
 
         xAxisMinValue: -1,
-        xAxisMaxValue: 3,
+        xAxisMaxValue: 4,
 
         leftAxisMinValue: 0,
         leftAxisMaxValue: 100,
@@ -50,38 +44,37 @@ export class AppComponent {
         rightAxisMaxValue: 70,
 
         font: "Papyrus",
+        xAxisLabelPosition: "Bottom",
         showValueLabels: false,
         showLeftAxis: true,
-        showRightAxis: true,
-        xAxisLabelPosition: "Bottom",
+        showRightAxis: false,
     };
-    public leftAxisFormatter: any = {
+    public leftAxisFormatter: YAxisFormatterInterface = {
         type: "Float",
         numberOfDigits: 1
     };
-    public rightAxisFormatter: any = {
+    public rightAxisFormatter: YAxisFormatterInterface = {
         type: "Float",
         numberOfDigits: 1
     };
-
-    public markerConfig: any;
-    public dataSet: Array<any>;
+    public markerConfig: ChartMarkerConfig
+    public dataSet: Array<DataLineChartInterface>;
     public barDataSet: Array<DataBarChartInterface>;
-    public labels: Array<any>;
+    public labels: Array<DataSetLabelInterface>;
     constructor(
-        public changeDetectorRef: ChangeDetectorRef,
+        public changeDetectorRef: ChangeDetectorRef
     ) {
         let cyan = new Color("#00FFFF");
         let color = new Color("#FF0000");
         let color1 = new Color("#00FF00");
-        let arrDataView1: Array<any> = [];
-        let arrDataView2: Array<any> = [];
-        let arrLabel: Array<any> = [];
-        let arrDataView: Array<any> = [];
+        let arrDataView1: Array<DataSetChartInterface> = [];
+        let arrDataView2: Array<DataSetChartInterface> = [];
+        let arrLabel: Array<DataSetLabelInterface> = [];
+        let arrDataView: Array<DataSetChartInterface> = [];
         for (let i = 0; i < 8; i++) {
             arrDataView1.push({
                 x: i,
-                y: i * 9.3,
+                y: i * 9,
             });
             arrDataView2.push({
                 x: i,
@@ -94,13 +87,13 @@ export class AppComponent {
             })
 
         }
-        let item: any = {
+        let item: DataLineChartInterface = {
             dataSet: arrDataView1,
             lineColor: cyan,
             highlighColor: color,
             legendLabel: "arrDataView1"
         };
-        let item1: any = {
+        let item1: DataLineChartInterface = {
             dataSet: arrDataView2,
             lineColor: color1,
             highlighColor: color,
@@ -115,13 +108,6 @@ export class AppComponent {
             highlighColor: color,
             barColor: color1
         });
-        // this.barDataSet.push({
-        //     dataSet: arrDataView2,
-        //     legendLabel: "barChartView2",
-        //     highlighColor: color,
-        //     barColor: cyan
-        // });
-        this.labels = arrLabel;
         this.markerConfig = {
             displayData: {
                 showXValue: false,
@@ -140,6 +126,13 @@ export class AppComponent {
                 y: 10
             }
         }
+        // this.barDataSet.push({
+        //     dataSet: arrDataView2,
+        //     legendLabel: "barChartView2",
+        //     highlighColor: color,
+        //     barColor: cyan
+        // });
+        this.labels = arrLabel;
     }
 
     ngOnInit() {
@@ -152,6 +145,7 @@ export class AppComponent {
     }
 
     onTap(args) {
+
         this.leftAxisFormatter = {
             type: "Float",
             numberOfDigits: 2
@@ -182,9 +176,7 @@ export class AppComponent {
             this.setUp.rightAxisLineColor = "#0000ff",
             this.setUp.rightAxisTextColor = "#0000ff",
             this.setUp.xAxisLabelPosition = "Bottom";
-        this.setUp.showValueLabels = !this.setUp.showValueLabels;
-        this.setUp.showLeftAxis = !this.setUp.showLeftAxis;
-        this.setUp.showRightAxis = !this.setUp.showRightAxis;
+
         this.setUp.xAxisMinValue = 1;
         this.setUp.xAxisMaxValue = 7;
 
@@ -197,14 +189,9 @@ export class AppComponent {
         let cyan = new Color("#00FFFF");
         let color = new Color("#FF0000");
         let color1 = new Color("#00FF00");
-        let arrDataView1: Array<any> = [];
-        let arrDataView2: Array<any> = [];
-        let arrLabel: Array<any> = [];
-
-
-        // let customChartMarkerView = new CustomChartMarkerView(application.android.context, packageName.R.layout.default_marker_view);
-        // customChartMarkerView.setConfig(this.markerConfig);
-        // this.lineChart.nativeElement.android.setMarker(customChartMarkerView);
+        let arrDataView1: Array<DataSetChartInterface> = [];
+        let arrDataView2: Array<DataSetChartInterface> = [];
+        let arrLabel: Array<DataSetLabelInterface> = [];
         // this.lineChart.nativeElement.android.getAxisLeft().setAxisLineColor(color1.android);
         //     for (let i = 0; i < 9; i++) {
         //         arrDataView1.push({
@@ -238,7 +225,7 @@ export class AppComponent {
         //     this.dataSet.push(item);
         //     // this.dataSet.push(item1);
         //     this.labels = arrLabel;
-        this.lineChart.nativeElement.resetZoomLineChart();
+        // this.lineChart.nativeElement.resetZoomLineChart();
         //     this.changeDetectorRef.detectChanges();
     }
 
@@ -303,9 +290,9 @@ export class AppComponent {
         let cyan = new Color("#00FFFF");
         let color = new Color("#FF0000");
         let color1 = new Color("#00FF00");
-        let arrDataView1: Array<any> = [];
-        let arrDataView2: Array<any> = [];
-        let arrLabel: Array<any> = [];
+        let arrDataView1: Array<DataSetChartInterface> = [];
+        let arrDataView2: Array<DataSetChartInterface> = [];
+        let arrLabel: Array<DataSetLabelInterface> = [];
         console.log("color1 -09-0-0-0-0-0-0-0-- ", color1);
 
         for (let i = 0; i < 8; i++) {
@@ -324,13 +311,13 @@ export class AppComponent {
             })
 
         }
-        let item: any = {
+        let item: DataLineChartInterface = {
             dataSet: arrDataView1,
             lineColor: cyan,
             highlighColor: color,
             legendLabel: "arrDataView1"
         };
-        let item1: any = {
+        let item1: DataLineChartInterface = {
             dataSet: arrDataView2,
             lineColor: color1,
             highlighColor: color,
