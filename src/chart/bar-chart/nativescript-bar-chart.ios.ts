@@ -49,7 +49,6 @@ import {
 import { ChartMarkerConfig, ConfigDisplayData } from "../custom-marker-view/custom-marker-view.common";
 import { Color } from "tns-core-modules/color";
 declare var UIEdgeInsetsMake: any;
-import { layout } from "tns-core-modules/utils/utils";
 
 export class MPBarChart extends MPChartBase {
     nativeView: BarChartView;

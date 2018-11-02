@@ -470,14 +470,14 @@ showValueLabelsProperty.register(MPChartBase);
 
 export const showLeftAxisProperty = new Property<MPChartBase, boolean>({
     name: "showLeftAxis",
-    defaultValue: false,
+    defaultValue: true,
     valueConverter: booleanConverter
 });
 showLeftAxisProperty.register(MPChartBase);
 
 export const showRightAxisProperty = new Property<MPChartBase, boolean>({
     name: "showRightAxis",
-    defaultValue: false,
+    defaultValue: true,
     valueConverter: booleanConverter
 });
 showRightAxisProperty.register(MPChartBase);

@@ -45,8 +45,8 @@ export class AppComponent {
 
         font: "Papyrus",
         xAxisLabelPosition: "Bottom",
-        showValueLabels: false,
-        showLeftAxis: true,
+        showValueLabels: true,
+        showLeftAxis: false,
         showRightAxis: false,
     };
     public leftAxisFormatter: YAxisFormatterInterface = {
@@ -97,6 +97,9 @@ export class AppComponent {
             dataSet: arrDataView2,
             lineColor: color1,
             highlighColor: color,
+            circleEnable: true,
+            circleHoleEnabled: true,
+            circleColor: color
         };
         this.dataSet = [];
         this.dataSet.push(item);
@@ -106,7 +109,7 @@ export class AppComponent {
             dataSet: arrDataView1,
             legendLabel: "barChartView1",
             highlighColor: color,
-            barColor: color1
+            barColor: color1,
         });
         this.markerConfig = {
             displayData: {
@@ -167,16 +170,17 @@ export class AppComponent {
         this.setUp.xAxisGranularityProperty = 3;
         this.setUp.rightAxisGranularityProperty = 15;
         this.setUp.leftAxisGranularityProperty = 15;
-        this.setUp.leftAxisGranularityProperty = 20,
-            this.setUp.rightAxisGranularityProperty = 30,
-            this.setUp.xAxisLineColor = "#ff0000",
-            this.setUp.xAxisTextColor = "#ff0000",
-            this.setUp.leftAxisLineColor = "#00ff00",
-            this.setUp.leftAxisTextColor = "#00ff00",
-            this.setUp.rightAxisLineColor = "#0000ff",
-            this.setUp.rightAxisTextColor = "#0000ff",
-            this.setUp.xAxisLabelPosition = "Bottom";
-
+        this.setUp.leftAxisGranularityProperty = 20;
+        this.setUp.rightAxisGranularityProperty = 30;
+        this.setUp.xAxisLineColor = "#ff0000";
+        this.setUp.xAxisTextColor = "#ff0000";
+        this.setUp.leftAxisLineColor = "#00ff00";
+        this.setUp.leftAxisTextColor = "#00ff00";
+        this.setUp.rightAxisLineColor = "#0000ff";
+        this.setUp.rightAxisTextColor = "#0000ff";
+        this.setUp.xAxisLabelPosition = "Bottom";
+        this.setUp.showRightAxis = !this.setUp.showRightAxis;
+        console.log(this.setUp.showRightAxis);
         this.setUp.xAxisMinValue = 1;
         this.setUp.xAxisMaxValue = 7;
 
