@@ -37,6 +37,9 @@ import {
     fontProperty,
     itemsProperty,
     labelsProperty,
+    showValueLabelsProperty,
+    showLeftAxisProperty,
+    showRightAxisProperty,
     DataLineChartInterface,
     DataSetChartInterface,
     DataSetLabelInterface,
@@ -44,14 +47,18 @@ import {
 } from "../nativescript-mpchart.common";
 import { Color } from "tns-core-modules/color";
 import { layout } from "tns-core-modules/utils/utils";
+import { ChartMarkerConfig, ConfigDisplayData } from "../custom-marker-view/custom-marker-view.common";
+declare var UIEdgeInsetsMake: any;
 
 export class MPLineChart extends MPChartBase {
     nativeView: LineChartView;
+    private showValueLabels: boolean;
     public createNativeView() {
         let dataset: LineChartDataSet;
         let lineChartView = LineChartView.new();
         // set some default value of chart when init view
         let description: ChartDescription = ChartDescription.new();
+        description.text = "";
         lineChartView.chartDescription = description;
         lineChartView.xAxis.labelPosition = XAxisLabelPosition.Bottom;
         lineChartView.xAxis.drawGridLinesEnabled = false;
@@ -59,7 +66,8 @@ export class MPLineChart extends MPChartBase {
         lineChartView.rightAxis.drawGridLinesEnabled = false;
         lineChartView.highlightPerDragEnabled = false;
         lineChartView.highlightPerTapEnabled = false;
-
+        lineChartView.leftAxis.enabled = false;
+        lineChartView.rightAxis.enabled = false;
         lineChartView.xAxis.axisMinimum = 0;
         lineChartView.leftAxis.axisMinimum = 0;
         lineChartView.rightAxis.axisMinimum = 0;
@@ -101,6 +109,12 @@ export class MPLineChart extends MPChartBase {
                 dataset.highlightEnabled = false;
                 if (items[i].highlighColor) {
                     dataset.highlightColor = items[i].highlighColor.ios;
+                }
+                if (this.showValueLabels != undefined) {
+                    dataset.drawValuesEnabled = this.showValueLabels;
+                }
+                else {
+                    dataset.drawValuesEnabled = true;
                 }
                 lineChartData.addDataSet(dataset);
             }
@@ -569,6 +583,43 @@ export class MPLineChart extends MPChartBase {
         }
         else {
             throw new Error("xAxisFontProperty Font " + fontName + " Do not exist");
+        }
+    }
+    public [showValueLabelsProperty.getDefault](): boolean {
+        return true;
+    }
+
+    public [showValueLabelsProperty.setNative](value: boolean) {
+        this.showValueLabels = value;
+        if (this.nativeView.data) {
+            let dataSets = this.nativeView.data.dataSets;
+            if (dataSets) {
+                for (let i = 0; i < dataSets.count; i++) {
+                    dataSets[i].drawValuesEnabled = value;
+                }
+            }
+        }
+    }
+
+    public [showLeftAxisProperty.setNative](value: boolean) {
+        let leftAxis: ChartYAxis;
+        leftAxis = this.nativeView.leftAxis;
+        if (leftAxis) {
+            leftAxis.enabled = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' in showLeftAxisProperty of Chart undefined");
+        }
+    }
+
+    public [showRightAxisProperty.setNative](value: boolean) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis) {
+            rightAxis.enabled = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' in showRightAxisProperty of Chart undefined");
         }
     }
 }

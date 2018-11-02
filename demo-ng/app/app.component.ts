@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Self } from "@angular/core";
 import { Color } from "tns-core-modules/color/color";
-import { DataLineChartInterface, DataBarChartInterface, DataSetChartInterface, DataSetLabelInterface, YAxisFormatterInterface } from "nativescript-mpchart";
+import { DataLineChartInterface, DataBarChartInterface, DataSetChartInterface, DataSetLabelInterface, YAxisFormatterInterface, ChartMarkerConfig } from "nativescript-mpchart/index";
 declare var UIFont: any;
 declare var BarChartData: any;
 @Component({
@@ -45,6 +45,9 @@ export class AppComponent {
 
         font: "Papyrus",
         xAxisLabelPosition: "Bottom",
+        showValueLabels: true,
+        showLeftAxis: false,
+        showRightAxis: false,
     };
     public leftAxisFormatter: YAxisFormatterInterface = {
         type: "Float",
@@ -54,6 +57,7 @@ export class AppComponent {
         type: "Float",
         numberOfDigits: 1
     };
+    public markerConfig: ChartMarkerConfig
     public dataSet: Array<DataLineChartInterface>;
     public barDataSet: Array<DataBarChartInterface>;
     public labels: Array<DataSetLabelInterface>;
@@ -93,6 +97,9 @@ export class AppComponent {
             dataSet: arrDataView2,
             lineColor: color1,
             highlighColor: color,
+            circleEnable: true,
+            circleHoleEnabled: true,
+            circleColor: color
         };
         this.dataSet = [];
         this.dataSet.push(item);
@@ -102,8 +109,26 @@ export class AppComponent {
             dataSet: arrDataView1,
             legendLabel: "barChartView1",
             highlighColor: color,
-            barColor: color1
+            barColor: color1,
         });
+        this.markerConfig = {
+            displayData: {
+                showXValue: false,
+                showYValue: true,
+                formatter: "Yvalue: {{y}}",
+            },
+            contentCenter: true,
+            xOffset: -30,
+            yOffset: -30,
+            backgroundColor: new Color("#0000ff"),
+            textColor: new Color("#ffffff"),
+            font: "Papyrus",
+            fontSize: 12,
+            padding: {
+                x: 20,
+                y: 10
+            }
+        }
         // this.barDataSet.push({
         //     dataSet: arrDataView2,
         //     legendLabel: "barChartView2",
@@ -145,16 +170,17 @@ export class AppComponent {
         this.setUp.xAxisGranularityProperty = 3;
         this.setUp.rightAxisGranularityProperty = 15;
         this.setUp.leftAxisGranularityProperty = 15;
-        this.setUp.leftAxisGranularityProperty = 20,
-            this.setUp.rightAxisGranularityProperty = 30,
-            this.setUp.xAxisLineColor = "#ff0000",
-            this.setUp.xAxisTextColor = "#ff0000",
-            this.setUp.leftAxisLineColor = "#00ff00",
-            this.setUp.leftAxisTextColor = "#00ff00",
-            this.setUp.rightAxisLineColor = "#0000ff",
-            this.setUp.rightAxisTextColor = "#0000ff",
-            this.setUp.xAxisLabelPosition = "Bottom";
-
+        this.setUp.leftAxisGranularityProperty = 20;
+        this.setUp.rightAxisGranularityProperty = 30;
+        this.setUp.xAxisLineColor = "#ff0000";
+        this.setUp.xAxisTextColor = "#ff0000";
+        this.setUp.leftAxisLineColor = "#00ff00";
+        this.setUp.leftAxisTextColor = "#00ff00";
+        this.setUp.rightAxisLineColor = "#0000ff";
+        this.setUp.rightAxisTextColor = "#0000ff";
+        this.setUp.xAxisLabelPosition = "Bottom";
+        this.setUp.showRightAxis = !this.setUp.showRightAxis;
+        console.log(this.setUp.showRightAxis);
         this.setUp.xAxisMinValue = 1;
         this.setUp.xAxisMaxValue = 7;
 

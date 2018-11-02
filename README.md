@@ -50,13 +50,28 @@ Gets or sets max value of Axis.
 * **leftAxisFormatter, rightAxisFormatter** - *YAxisFormatterInterface*  
 Gets or sets formatter value for left and right Axis. Now, the plugin support two type is:  "Int" | "Float".
 Default value not format it show like input.
-SEE DETAIL IN DEMO.
-* **font** - *string* 
-Only iOS - this is Name of Font Name.
+SEE DETAIL IN DEMO. 
+* **showValueLabels** - *boolean*  
+show or hide labels value. 
+* **showLeftAxis, showRightAxis** - *boolean*  
+show or hide left or right Axis. 
+* **font** - *string* - only iOS - this is Name of Font Name.
 Gets or sets font of all text in chart such as legend text, axis label text, description text, value in line text..etc.etc... 
 To use it you need add file .ttf from app/fonts/font-name.ttf. 
-WATCH DETAIL IN DEMO.
-
+* **marker** - *ChartMarkerConfig* - only work BarChart.
+set up config to show marker when select point in chart.
+SEE DETAIL IN DEMO.
+Usage marker:
+iOS: don't need setup.
+Android: go to demo-ng and copy file default_marker_view.xml in to App_Resources/Android/layout/default_marker_view.xml. Move it in your project with path likely.
+After add :
+```xml
+    <color name="marker_background">#cccccc</color>
+    <color name="marker_text_color">#000000</color>
+    <color name="text_view_color">#ff0000</color>
+```
+into App_Resources/Android/values/colors.xml.
+SEE DETAIL IN demo-ng 
 ### Method
 * **resetZoomLineChart()** - *Function -> void*
 
@@ -100,6 +115,43 @@ DataBarChartInterface {
     legendLabel?: string;
     highlighColor?: Color,
     barColor?: Color;
+}
+
+ChartMarkerSize {
+    width: number,
+    height: number
+}
+
+ChartMarkerPadding {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+}
+
+ConfigDisplayData {
+    showXValue: boolean,
+    showYValue: boolean,
+    fixedXValue?: YAxisFormatterInterface,
+    fixedYValue?: YAxisFormatterInterface,
+    formatter: string;
+}
+
+ChartMarkerConfig {
+    backgroundColor?: Color,
+    textColor?: Color,
+    font?: string,
+    fontSize?: number,
+    padding?: {
+        x: number,
+        y: number
+    },
+    minimumSize?: ChartMarkerSize,
+    borderRadius?: number,
+    contentCenter?: boolean,
+    displayData: ConfigDisplayData,
+    xOffset?: number,
+    yOffset?: number,
 }
 ```
 
@@ -150,7 +202,9 @@ to full in parent layout.
             [xAxisTextColor]="setUp.xAxisTextColor" [leftAxisTextColor]="setUp.leftAxisTextColor" [rightAxisTextColor]="setUp.rightAxisTextColor"
             [xAxisMinValue]="setUp.xAxisMinValue" [leftAxisMinValue]="setUp.leftAxisMinValue" [rightAxisMinValue]="setUp.rightAxisMinValue"
             [leftAxisMaxValue]="setUp.leftAxisMaxValue" [rightAxisMaxValue]="setUp.rightAxisMaxValue" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
-            [leftAxisFormatter]="leftAxisFormatter" [rightAxisFormatter]="rightAxisFormatter" [font]="setUp.font" class="mp-chart"></MPBarChart>
+            [leftAxisFormatter]="leftAxisFormatter" [rightAxisFormatter]="rightAxisFormatter" [font]="setUp.font" 
+            [showValueLabels]="setUp.showValueLabels" [showLeftAxis]="setUp.showLeftAxis" [showRightAxis]="setUp.showRightAxis"
+            [marker]="markerConfig" class="mp-chart"></MPBarChart>
     </StackLayout>
 
 ```
@@ -178,7 +232,7 @@ import { DataLineChartInterface, DataSetChartInterface, DataSetLabelInterface,YA
 
 export class AppComponent {
 
-    public setUp: any = {
+     public setUp: any = {
         showGridLines: false,
         showLegend: true,
         scaleEnable: true,
@@ -194,36 +248,43 @@ export class AppComponent {
         xAxisLineColor: "#ff0000",
         xAxisTextColor: "#ff0000",
 
-        leftAxisLineColor: "#ff0000",
-        leftAxisTextColor: "#ff0000",
+        leftAxisLineColor: "#0000ff",
+        leftAxisTextColor: "#0000ff",
 
         rightAxisLineColor: "#00ff00",
         rightAxisTextColor: "#00ff00",
 
-        xAxisMinValue: 1,
-        xAxisMaxValue: 7,
+        xAxisMinValue: -1,
+        xAxisMaxValue: 4,
 
-        leftAxisMinValue: 9,
+        leftAxisMinValue: 0,
         leftAxisMaxValue: 100,
 
-        rightAxisMinValue: 9,
+        rightAxisMinValue: 0,
         rightAxisMaxValue: 70,
 
         font: "Papyrus",
         xAxisLabelPosition: "Bottom",
+        showValueLabels: false,
+        showLeftAxis: true,
+        showRightAxis: false,
     };
     public leftAxisFormatter: YAxisFormatterInterface = {
         type: "Float",
         numberOfDigits: 1
     };
     public rightAxisFormatter: YAxisFormatterInterface = {
-        type: "Int"
+        type: "Float",
+        numberOfDigits: 1
     };
+    public markerConfig: ChartMarkerConfig
     public dataSet: Array<DataLineChartInterface>;
     public barDataSet: Array<DataBarChartInterface>;
     public labels: Array<DataSetLabelInterface>;
-    constructor() { 
-       let cyan = new Color("#00FFFF");
+    constructor(
+        public changeDetectorRef: ChangeDetectorRef
+    ) {
+        let cyan = new Color("#00FFFF");
         let color = new Color("#FF0000");
         let color1 = new Color("#00FF00");
         let arrDataView1: Array<DataSetChartInterface> = [];
@@ -239,10 +300,12 @@ export class AppComponent {
                 x: i,
                 y: i + 30,
             });
+
             arrLabel.push({
                 xAxisValue: i,
                 label: `Tháng ` + (i + 1)
             })
+
         }
         let item: DataLineChartInterface = {
             dataSet: arrDataView1,
@@ -265,11 +328,36 @@ export class AppComponent {
             highlighColor: color,
             barColor: color1
         });
+        this.markerConfig = {
+            displayData: {
+                showXValue: false,
+                showYValue: true,
+                formatter: "Yvalue: {{y}}",
+            },
+            contentCenter: true,
+            xOffset: -30,
+            yOffset: -30,
+            backgroundColor: new Color("#0000ff"),
+            textColor: new Color("#ffffff"),
+            font: "Papyrus",
+            fontSize: 12,
+            padding: {
+                x: 20,
+                y: 10
+            }
+        }
         this.labels = arrLabel;
     }
 }
-
 ```
+##FixSameError
+
+When use plugin if you see error when build --aot in line import interface in file .component like this : 
+
+Module not found. Can't resolve "nativescript-mpchart" in "`relative path`\*.component". 
+
+You can't try change to : import { ... } from "nativescript-mpchart/index" and delete all platform, hook, node_modules and rebuild. I think an error in platform and angular not in plugin because i see it when develop.
+
 ## Demos
 This repository includes both Angular and plain NativeScript demos. In order to run those execute the following in your shell:
 ```shell

@@ -35,27 +35,36 @@ import {
     leftAxisFormatterProperty,
     rightAxisFormatterProperty,
     fontProperty,
+    showValueLabelsProperty,
+    showLeftAxisProperty,
+    showRightAxisProperty,
     itemsProperty,
     labelsProperty,
+    markerProperty,
     DataBarChartInterface,
     DataSetChartInterface,
     DataSetLabelInterface,
     YAxisFormatterInterface,
 } from "../nativescript-mpchart.common";
+import { ChartMarkerConfig, ConfigDisplayData } from "../custom-marker-view/custom-marker-view.common";
 import { Color } from "tns-core-modules/color";
-import { layout } from "tns-core-modules/utils/utils";
+declare var UIEdgeInsetsMake: any;
 
 export class MPBarChart extends MPChartBase {
     nativeView: BarChartView;
+    private showValueLabels: boolean;
     public createNativeView() {
         let barChartView = BarChartView.new();
         // set some default value of chart when init view
         let description: ChartDescription = ChartDescription.new();
+        description.text = "";
         barChartView.chartDescription = description;
         barChartView.xAxis.labelPosition = XAxisLabelPosition.Bottom;
         barChartView.xAxis.drawGridLinesEnabled = false;
         barChartView.leftAxis.drawGridLinesEnabled = false;
         barChartView.rightAxis.drawGridLinesEnabled = false;
+        barChartView.leftAxis.enabled = false;
+        barChartView.rightAxis.enabled = false;
         // barChartView.highlightPerDragEnabled = false;
         // barChartView.highlightPerTapEnabled = false;
 
@@ -63,6 +72,7 @@ export class MPBarChart extends MPChartBase {
         barChartView.leftAxis.axisMinimum = 0;
         barChartView.rightAxis.axisMinimum = 0;
         barChartView.doubleTapToZoomEnabled = false;
+        barChartView.fitBars = true;
         return barChartView;
     }
 
@@ -84,12 +94,19 @@ export class MPBarChart extends MPChartBase {
                 let entries: NSMutableArray<any> = NSMutableArray.new();
                 for (let j = 0; j < items[i].dataSet.length; j++) {
                     let entrie = BarChartDataEntry.new().initWithXY(items[i].dataSet[j].x, items[i].dataSet[j].y);
+
                     entries.addObject(entrie);
                 }
                 let dataset: BarChartDataSet = BarChartDataSet.alloc().initWithValuesLabel(entries, labelLegend);
                 dataset.setColor(items[i].barColor.ios);
                 dataset.highlightColor = items[i].highlighColor.ios;
                 dataset.highlightEnabled = true;
+                if (this.showValueLabels != undefined) {
+                    dataset.drawValuesEnabled = this.showValueLabels;
+                }
+                else {
+                    dataset.drawValuesEnabled = true;
+                }
                 barChartData.addDataSet(dataset);
             }
             else {
@@ -553,5 +570,262 @@ export class MPBarChart extends MPChartBase {
             throw new Error("xAxisFontProperty Font " + fontName + " Do not exist");
         }
     }
+    public [showValueLabelsProperty.getDefault](): boolean {
+        return true;
+    }
 
+    public [showValueLabelsProperty.setNative](value: boolean) {
+        this.showValueLabels = value;
+        if (this.nativeView.data) {
+            let dataSets = this.nativeView.data.dataSets;
+            if (dataSets) {
+                for (let i = 0; i < dataSets.count; i++) {
+                    dataSets[i].drawValuesEnabled = value;
+                }
+            }
+        }
+    }
+
+    public [showLeftAxisProperty.setNative](value: boolean) {
+        let leftAxis: ChartYAxis;
+        leftAxis = this.nativeView.leftAxis;
+        if (leftAxis) {
+            leftAxis.enabled = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' in showLeftAxisProperty of Chart undefined");
+        }
+    }
+
+    public [showRightAxisProperty.setNative](value: boolean) {
+        let rightAxis: ChartYAxis;
+        rightAxis = this.nativeView.rightAxis;
+        if (rightAxis) {
+            rightAxis.enabled = value;
+        }
+        else {
+            throw new Error("Property  'xAxis' in showRightAxisProperty of Chart undefined");
+        }
+    }
+
+    public [markerProperty.setNative](markerConfig: ChartMarkerConfig) {
+        console.log("markerProperty");
+        let marker: any = CustomChartMarkerView.alloc().initWithFrame(CGRectMake(0, 0, 100, 100));
+        marker.setConfig(markerConfig);
+        this.nativeView.marker = marker;
+    }
+}
+
+export class CustomChartMarkerView extends ChartMarkerView {
+    public label: UILabel;
+    public backgroundViewColor: UIColor;
+    public font: UIFont;
+    public fontSize: number;
+    public textColor: UIColor;
+    public minimumSize: CGSize;
+    public insets: UIEdgeInsets;
+    public textAlignment: NSTextAlignment;
+    public borderRadius: number;
+    public contentCenter: boolean;
+    public displayData: ConfigDisplayData;
+    public xOffset: number;
+    public yOffset: number;
+
+    private nsStringLabel: NSString;
+    private labelSize: CGSize;
+    private paragraphStyle: NSMutableParagraphStyle;
+    private drawAttributes: NSMutableDictionary<any, any>;
+    initWithFrame(frame: CGRect) {
+        this.setDefault();
+        return super.initWithFrame(frame);
+    }
+    refreshContentWithEntryHighlight(entry: ChartDataEntry, highlight: ChartHighlight) {
+        this.setLabel(entry);
+    }
+
+    removeAllSubview() {
+        for (let i = 0; i < this.subviews.count; i++) {
+            this.subviews[i].removeFromSuperview();
+        }
+    }
+
+    setLabel(entry: ChartDataEntry) {
+        let text: string;
+        if (this.displayData) {
+            text = this.displayData.formatter;
+            let indexX = this.displayData.formatter.indexOf("{{x}}");
+            let indexY = this.displayData.formatter.indexOf("{{y}}");
+            let x: string;
+            let y: string;
+            if (this.displayData.fixedXValue) {
+                switch (this.displayData.fixedXValue.type) {
+                    case "Int":
+                        x = entry.x.toFixed();
+                        break;
+                    case "Float":
+                        x = entry.x.toFixed(this.displayData.fixedXValue.numberOfDigits);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else {
+                x = entry.x.toFixed();
+            }
+
+            if (this.displayData.fixedYValue) {
+                switch (this.displayData.fixedYValue.type) {
+                    case "Int":
+                        y = entry.y.toFixed();
+                        break;
+                    case "Float":
+                        y = entry.y.toFixed(this.displayData.fixedYValue.numberOfDigits);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else {
+                y = entry.y.toFixed();
+            }
+            if (this.displayData.showXValue && indexX != -1) {
+                text = text.replace("{{x}}", x);
+            }
+
+            if (this.displayData.showYValue && indexY != -1) {
+                text = text.replace("{{y}}", y);
+                console.log("text if", text);
+            }
+            this.nsStringLabel = NSString.alloc().initWithString(text);
+        }
+        else {
+            text = "Y Value: " + entry.y.toFixed();
+            this.nsStringLabel = NSString.alloc().initWithString(text);
+        }
+        this.drawAttributes = NSMutableDictionary.alloc().init();
+        if (this.font) {
+            this.drawAttributes.setObjectForKey(this.font, NSFontAttributeName);
+        }
+        this.labelSize = this.nsStringLabel.sizeWithAttributes(this.drawAttributes);
+        var size = CGSizeMake(0, 0);
+        size.width = this.labelSize.width + this.insets.left + this.insets.right;
+        size.height = this.labelSize.height + this.insets.top + this.insets.bottom;
+        size.width = Math.max(this.minimumSize.width, size.width);
+        size.height = Math.max(this.minimumSize.height, size.height);
+
+        this.label = UILabel.alloc().initWithFrame(CGRectMake(0, 0, this.labelSize.width, this.labelSize.height));
+        let view = UIView.alloc().initWithFrame(CGRectMake(0 + this.xOffset - this.labelSize.width / 2, 0 + this.yOffset - this.labelSize.height, size.width, size.height));
+
+        this.label.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        this.label.numberOfLines = 0;
+        this.label.backgroundColor = UIColor.redColor;
+        this.label.text = text;
+        if (this.contentCenter) {
+            this.label.center = CGPointMake(view.frame.size.width / 2, view.frame.size.height / 2);
+        }
+        this.label.textColor = this.textColor;
+        this.label.font = this.font;
+        this.label.textAlignment = NSTextAlignment.Center;
+
+        view.backgroundColor = this.backgroundViewColor;
+        view.layer.cornerRadius = this.borderRadius;
+        view.addSubview(this.label);
+        this.removeAllSubview();
+        this.addSubview(view);
+    }
+
+    setConfig(config: ChartMarkerConfig) {
+        console.log("setConfig");
+        if (config.backgroundColor) {
+            this.backgroundViewColor = config.backgroundColor.ios;
+        }
+
+        if (config.textColor) {
+            this.textColor = config.textColor.ios;
+        }
+
+        if (config.fontSize) {
+            this.fontSize = config.fontSize;
+        }
+
+        if (config.borderRadius) {
+            this.borderRadius = config.borderRadius;
+        }
+
+        if (config.padding) {
+            let x = config.padding.x ? config.padding.x : 0;
+            let y = config.padding.y ? config.padding.y : 0;
+            this.insets = UIEdgeInsetsMake(y, x, y, x);
+        }
+
+        if (config.minimumSize) {
+            this.minimumSize = CGSizeMake(config.minimumSize.width, config.minimumSize.height);
+        }
+
+
+        if (config.font) {
+            var font: string;
+            let familyNames = UIFont.familyNames;
+            for (var i = 0; i < familyNames.count; ++i) {
+                if (familyNames[i] == config.font) {
+                    font = config.font;
+                    break;
+                }
+                var famName = familyNames[i];
+                var fontNamesForFamily = UIFont.fontNamesForFamilyName(famName);
+                for (var k = 0; k < fontNamesForFamily.count; ++k) {
+                    if (config.font == fontNamesForFamily[k]) {
+                        font = config.font;
+                        break;
+                    }
+                }
+            }
+            let fontSize = config.fontSize ? config.fontSize : UIFont.systemFontSize;
+            if (font) {
+                this.font = UIFont.fontWithNameSize(font, fontSize);
+            }
+        }
+
+        if (config.contentCenter != undefined || config.contentCenter != null) {
+            this.contentCenter = config.contentCenter;
+        }
+
+        if (config.displayData) {
+            this.displayData = config.displayData;
+        }
+
+        if (config.xOffset) {
+            this.xOffset = config.xOffset;
+        }
+
+        if (config.yOffset) {
+            this.yOffset = config.yOffset;
+        }
+    }
+
+    setDefault() {
+        this.backgroundViewColor = new Color("#cccccc").ios;
+        this.textColor = new Color("#000000").ios;
+        this.minimumSize = CGSizeMake(20, 10);
+        this.insets = UIEdgeInsetsMake(5, 5, 5, 5);
+        this.fontSize = UIFont.systemFontSize;
+        this.borderRadius = 5;
+        this.font = UIFont.systemFontOfSize(UIFont.systemFontSize);
+        this.contentCenter = true;
+        this.displayData = {
+            showXValue: false,
+            showYValue: true,
+            fixedXValue: {
+                type: "Int",
+                numberOfDigits: 0
+            },
+            fixedYValue: {
+                type: "Float",
+                numberOfDigits: 2
+            },
+            formatter: "Y value: {{y}}"
+        }
+        this.xOffset = 0;
+        this.yOffset = 0;
+    }
 }

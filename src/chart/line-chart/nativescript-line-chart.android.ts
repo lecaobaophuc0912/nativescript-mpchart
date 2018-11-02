@@ -36,12 +36,17 @@ import {
     rightAxisFormatterProperty,
     itemsProperty,
     labelsProperty,
+    showLeftAxisProperty,
+    showRightAxisProperty,
+    showValueLabelsProperty,
     DataLineChartInterface,
     DataSetChartInterface,
     DataSetLabelInterface,
     YAxisFormatterInterface
 } from "../nativescript-mpchart.common";
 import { Color } from "tns-core-modules/color";
+import * as application from "tns-core-modules/application";
+import { ChartMarkerConfig, ConfigDisplayData } from "../custom-marker-view/custom-marker-view.common";
 var LineChart = com.github.mikephil.charting.charts.LineChart;
 var LineDataSet = com.github.mikephil.charting.data.LineDataSet;
 var LineData = com.github.mikephil.charting.data.LineData;
@@ -58,6 +63,7 @@ var IValueFormatter = com.github.mikephil.charting.formatter.IValueFormatter;
 
 export class MPLineChart extends MPChartBase {
     public nativeView: com.github.mikephil.charting.charts.LineChart;
+    private showValueLabels: boolean;
     public resetZoomLineChart() {
         this.nativeView.resetZoom();
     }
@@ -74,12 +80,15 @@ export class MPLineChart extends MPChartBase {
         yAxisLeft.setDrawGridLines(false);
         yAxisRight.setDrawGridLines(false);
 
+        yAxisLeft.setEnabled(true);
+        yAxisRight.setEnabled(true);
+
         yAxisLeft.setDrawLabels(true);
         yAxisRight.setDrawLabels(true);
         var description = new Description();
+        description.setText("");
         lineChartView.setDescription(description);
         lineChartView.setDoubleTapToZoomEnabled(false);
-
         return lineChartView;
     }
     public [itemsProperty.setNative](items: Array<DataLineChartInterface>) {
@@ -106,6 +115,12 @@ export class MPLineChart extends MPChartBase {
 
                     if (items[i].highlighColor) {
                         dataset.setHighLightColor(items[i].highlighColor.android);
+                    }
+                    if (this.showValueLabels != undefined) {
+                        dataset.setDrawValues(this.showValueLabels);
+                    }
+                    else {
+                        dataset.setDrawValues(true);
                     }
                     lineDatasets.add(dataset);
 
@@ -532,15 +547,42 @@ export class MPLineChart extends MPChartBase {
             }
         }
     }
+    public [showValueLabelsProperty.getDefault](): boolean {
+        return true;
+    }
+
+    public [showValueLabelsProperty.setNative](value: boolean) {
+        this.showValueLabels = value;
+        if (this.nativeView.getData()) {
+            let dataSets = this.nativeView.getData().getDataSets();
+            if (dataSets) {
+                for (let i = 0; i < dataSets.size(); i++) {
+                    this.nativeView.getData().getDataSets().get(i).setDrawValues(value);
+                }
+            }
+        }
+    }
+
+    public [showLeftAxisProperty.setNative](value: boolean) {
+        let leftAxis: com.github.mikephil.charting.components.YAxis;
+        leftAxis = this.nativeView.getAxisLeft();
+        if (leftAxis) {
+            leftAxis.setEnabled(value);
+        }
+        else {
+            throw new Error("Property  'xAxis' in showLeftAxisProperty of Chart undefined");
+        }
+    }
+
+    public [showRightAxisProperty.setNative](value: boolean) {
+        let rightAxis: com.github.mikephil.charting.components.YAxis;
+        rightAxis = this.nativeView.getAxisRight();
+        if (rightAxis) {
+            rightAxis.setEnabled(value);
+        }
+        else {
+            throw new Error("Property  'xAxis' in showRightAxisProperty of Chart undefined");
+        }
+    }
 
 }
-
-
-    // RangeSeekbarChangeListener END
-
-    // RangeSeekbarFinalValueListener START
-
-
-
-
-// RangeSeekbarFinalValueListener END
