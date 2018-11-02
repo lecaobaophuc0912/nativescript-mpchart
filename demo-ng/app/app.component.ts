@@ -1,14 +1,7 @@
 import { Component, ViewChild, ElementRef, ChangeDetectorRef, Self } from "@angular/core";
 import { Color } from "tns-core-modules/color/color";
-import {
-    DataLineChartInterface,
-    DataBarChartInterface,
-    DataSetChartInterface,
-    DataSetLabelInterface,
-    YAxisFormatterInterface,
-    rightAxisFormatterProperty,
-} from "nativescript-mpchart";
-import { ChartMarkerConfig, ChartMarkerSize, ConfigDisplayData } from "nativescript-mpchart/chart/custom-marker-view/custom-marker-view.common"
+import { DataLineChartInterface, DataBarChartInterface, DataSetChartInterface, DataSetLabelInterface, YAxisFormatterInterface} from "nativescript-mpchart";
+// import { ChartMarkerConfig, ChartMarkerSize, ConfigDisplayData } from "nativescript-mpchart/chart/custom-marker-view/custom-marker-view.common"
 import * as application from "application";
 import { Page } from "ui/page"
 // declare var UIFont: any;
@@ -62,29 +55,29 @@ export class AppComponent {
         showRightAxis: true,
         xAxisLabelPosition: "Bottom",
     };
-    public leftAxisFormatter: YAxisFormatterInterface = {
+    public leftAxisFormatter: any = {
         type: "Float",
         numberOfDigits: 1
     };
-    public rightAxisFormatter: YAxisFormatterInterface = {
+    public rightAxisFormatter: any = {
         type: "Float",
         numberOfDigits: 1
     };
 
-    public markerConfig: ChartMarkerConfig;
-    public dataSet: Array<DataLineChartInterface>;
+    public markerConfig: any;
+    public dataSet: Array<any>;
     public barDataSet: Array<DataBarChartInterface>;
-    public labels: Array<DataSetLabelInterface>;
+    public labels: Array<any>;
     constructor(
         public changeDetectorRef: ChangeDetectorRef,
     ) {
         let cyan = new Color("#00FFFF");
         let color = new Color("#FF0000");
         let color1 = new Color("#00FF00");
-        let arrDataView1: Array<DataSetChartInterface> = [];
-        let arrDataView2: Array<DataSetChartInterface> = [];
-        let arrLabel: Array<DataSetLabelInterface> = [];
-        let arrDataView: Array<DataSetChartInterface> = [];
+        let arrDataView1: Array<any> = [];
+        let arrDataView2: Array<any> = [];
+        let arrLabel: Array<any> = [];
+        let arrDataView: Array<any> = [];
         for (let i = 0; i < 8; i++) {
             arrDataView1.push({
                 x: i,
@@ -101,13 +94,13 @@ export class AppComponent {
             })
 
         }
-        let item: DataLineChartInterface = {
+        let item: any = {
             dataSet: arrDataView1,
             lineColor: cyan,
             highlighColor: color,
             legendLabel: "arrDataView1"
         };
-        let item1: DataLineChartInterface = {
+        let item1: any = {
             dataSet: arrDataView2,
             lineColor: color1,
             highlighColor: color,
@@ -204,9 +197,9 @@ export class AppComponent {
         let cyan = new Color("#00FFFF");
         let color = new Color("#FF0000");
         let color1 = new Color("#00FF00");
-        let arrDataView1: Array<DataSetChartInterface> = [];
-        let arrDataView2: Array<DataSetChartInterface> = [];
-        let arrLabel: Array<DataSetLabelInterface> = [];
+        let arrDataView1: Array<any> = [];
+        let arrDataView2: Array<any> = [];
+        let arrLabel: Array<any> = [];
 
 
         // let customChartMarkerView = new CustomChartMarkerView(application.android.context, packageName.R.layout.default_marker_view);
@@ -310,9 +303,9 @@ export class AppComponent {
         let cyan = new Color("#00FFFF");
         let color = new Color("#FF0000");
         let color1 = new Color("#00FF00");
-        let arrDataView1: Array<DataSetChartInterface> = [];
-        let arrDataView2: Array<DataSetChartInterface> = [];
-        let arrLabel: Array<DataSetLabelInterface> = [];
+        let arrDataView1: Array<any> = [];
+        let arrDataView2: Array<any> = [];
+        let arrLabel: Array<any> = [];
         console.log("color1 -09-0-0-0-0-0-0-0-- ", color1);
 
         for (let i = 0; i < 8; i++) {
@@ -331,13 +324,13 @@ export class AppComponent {
             })
 
         }
-        let item: DataLineChartInterface = {
+        let item: any = {
             dataSet: arrDataView1,
             lineColor: cyan,
             highlighColor: color,
             legendLabel: "arrDataView1"
         };
-        let item1: DataLineChartInterface = {
+        let item1: any = {
             dataSet: arrDataView2,
             lineColor: color1,
             highlighColor: color,
