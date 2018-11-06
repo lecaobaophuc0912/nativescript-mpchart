@@ -63,8 +63,8 @@ export class MPBarChart extends MPChartBase {
         barChartView.xAxis.drawGridLinesEnabled = false;
         barChartView.leftAxis.drawGridLinesEnabled = false;
         barChartView.rightAxis.drawGridLinesEnabled = false;
-        barChartView.leftAxis.enabled = false;
-        barChartView.rightAxis.enabled = false;
+        barChartView.leftAxis.enabled = true;
+        barChartView.rightAxis.enabled = true;
         // barChartView.highlightPerDragEnabled = false;
         // barChartView.highlightPerTapEnabled = false;
 
@@ -73,6 +73,7 @@ export class MPBarChart extends MPChartBase {
         barChartView.rightAxis.axisMinimum = 0;
         barChartView.doubleTapToZoomEnabled = false;
         barChartView.fitBars = true;
+        barChartView.setScaleEnabled(false);
         return barChartView;
     }
 
@@ -99,7 +100,9 @@ export class MPBarChart extends MPChartBase {
                 }
                 let dataset: BarChartDataSet = BarChartDataSet.alloc().initWithValuesLabel(entries, labelLegend);
                 dataset.setColor(items[i].barColor.ios);
-                dataset.highlightColor = items[i].highlighColor.ios;
+                if (items[i].highlighColor) {
+                    dataset.highlightColor = items[i].highlighColor.ios;
+                }
                 dataset.highlightEnabled = true;
                 if (this.showValueLabels != undefined) {
                     dataset.drawValuesEnabled = this.showValueLabels;

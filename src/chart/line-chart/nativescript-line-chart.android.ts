@@ -89,6 +89,7 @@ export class MPLineChart extends MPChartBase {
         description.setText("");
         lineChartView.setDescription(description);
         lineChartView.setDoubleTapToZoomEnabled(false);
+        lineChartView.setScaleEnabled(false);
         return lineChartView;
     }
     public [itemsProperty.setNative](items: Array<DataLineChartInterface>) {

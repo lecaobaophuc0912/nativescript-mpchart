@@ -91,6 +91,7 @@ export class MPBarChart extends MPChartBase {
         barChartView.setDescription(description);
         barChartView.setDoubleTapToZoomEnabled(false);
         barChartView.setFitBars(true);
+        barChartView.setScaleEnabled(false);
         return barChartView;
     }
 
@@ -107,7 +108,9 @@ export class MPBarChart extends MPChartBase {
                 if (entries.length) {
                     let dataset: com.github.mikephil.charting.data.BarDataSet = new BarDataSet(new ArrayList(java.util.Arrays.asList(entries)), labelLegend);
                     dataset.setColor(items[i].barColor.android);
-                    dataset.setHighLightColor(items[i].highlighColor.android);
+                    if (items[i].highlighColor) {
+                        dataset.setHighLightColor(items[i].highlighColor.android);
+                    }
                     if (this.showValueLabels != undefined) {
                         dataset.setDrawValues(this.showValueLabels);
                     }

@@ -66,12 +66,13 @@ export class MPLineChart extends MPChartBase {
         lineChartView.rightAxis.drawGridLinesEnabled = false;
         lineChartView.highlightPerDragEnabled = false;
         lineChartView.highlightPerTapEnabled = false;
-        lineChartView.leftAxis.enabled = false;
-        lineChartView.rightAxis.enabled = false;
+        lineChartView.leftAxis.enabled = true;
+        lineChartView.rightAxis.enabled = true;
         lineChartView.xAxis.axisMinimum = 0;
         lineChartView.leftAxis.axisMinimum = 0;
         lineChartView.rightAxis.axisMinimum = 0;
         lineChartView.doubleTapToZoomEnabled = false;
+        lineChartView.setScaleEnabled(false);
         return lineChartView;
     }
 
