@@ -68,6 +68,7 @@ export class MPBarChart extends MPChartBase {
         // barChartView.highlightPerDragEnabled = false;
         // barChartView.highlightPerTapEnabled = false;
 
+        barChartView.xAxis.granularity = 1;
         barChartView.xAxis.axisMinimum = 0;
         barChartView.leftAxis.axisMinimum = 0;
         barChartView.rightAxis.axisMinimum = 0;

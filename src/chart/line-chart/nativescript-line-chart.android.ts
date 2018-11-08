@@ -76,6 +76,7 @@ export class MPLineChart extends MPChartBase {
         yAxisLeft.setDrawGridLines(false);
         yAxisRight.setDrawGridLines(false);
 
+        xAxis.setGranularity(1);
         xAxis.setDrawGridLines(false);
         yAxisLeft.setDrawGridLines(false);
         yAxisRight.setDrawGridLines(false);

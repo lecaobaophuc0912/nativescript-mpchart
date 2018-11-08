@@ -172,7 +172,6 @@ xAxisGranularityProperty.register(MPChartBase);
 
 export const leftAxisGranularityProperty = new Property<MPChartBase, number>({
     name: "leftAxisGranularity",
-    defaultValue: 1,
     valueConverter: (v) => {
         if (parseFloat(v) !== NaN) {
             return parseFloat(v);
@@ -184,7 +183,6 @@ leftAxisGranularityProperty.register(MPChartBase);
 
 export const rightAxisGranularityProperty = new Property<MPChartBase, number>({
     name: "rightAxisGranularity",
-    defaultValue: 1,
     valueConverter: (v) => {
         if (parseFloat(v) !== NaN) {
             return parseFloat(v);

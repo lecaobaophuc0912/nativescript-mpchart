@@ -68,6 +68,7 @@ export class MPLineChart extends MPChartBase {
         lineChartView.highlightPerTapEnabled = false;
         lineChartView.leftAxis.enabled = true;
         lineChartView.rightAxis.enabled = true;
+        lineChartView.xAxis.granularity = 1;
         lineChartView.xAxis.axisMinimum = 0;
         lineChartView.leftAxis.axisMinimum = 0;
         lineChartView.rightAxis.axisMinimum = 0;
