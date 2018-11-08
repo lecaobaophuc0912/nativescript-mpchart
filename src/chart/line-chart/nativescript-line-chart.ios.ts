@@ -68,6 +68,7 @@ export class MPLineChart extends MPChartBase {
         lineChartView.highlightPerTapEnabled = false;
         lineChartView.leftAxis.enabled = true;
         lineChartView.rightAxis.enabled = true;
+        lineChartView.xAxis.granularity = 1;
         lineChartView.xAxis.axisMinimum = 0;
         lineChartView.leftAxis.axisMinimum = 0;
         lineChartView.rightAxis.axisMinimum = 0;
@@ -132,7 +133,7 @@ export class MPLineChart extends MPChartBase {
             let formatter: any = ChartDefaultAxisValueFormatter.alloc().initWithBlock(function (value, axis) {
                 for (let i = 0; i < labels.length; i++) {
                     if (labels[i].xAxisValue == value) {
-                        return labels[i].label
+                        return labels[i].label + '';
                     }
                 }
                 return "";
