@@ -133,7 +133,7 @@ export class MPLineChart extends MPChartBase {
             let formatter: any = ChartDefaultAxisValueFormatter.alloc().initWithBlock(function (value, axis) {
                 for (let i = 0; i < labels.length; i++) {
                     if (labels[i].xAxisValue == value) {
-                        return labels[i].label
+                        return labels[i].label + '';
                     }
                 }
                 return "";

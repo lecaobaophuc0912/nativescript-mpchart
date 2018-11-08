@@ -136,7 +136,7 @@ export class MPBarChart extends MPChartBase {
                     getFormattedValue(value, entry) {
                         for (let i = 0; i < labels.length; i++) {
                             if (labels[i].xAxisValue == value) {
-                                return labels[i].label
+                                return labels[i].label + '';
                             }
                         }
                         return "";
