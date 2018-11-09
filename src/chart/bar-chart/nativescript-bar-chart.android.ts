@@ -48,6 +48,7 @@ import {
 import { Color } from "tns-core-modules/color";
 import * as application from "tns-core-modules/application";
 import { ChartMarkerConfig, ConfigDisplayData } from "../custom-marker-view/custom-marker-view.common";
+import * as formatNumber from "simple-format-number";
 var BarChart = com.github.mikephil.charting.charts.BarChart;
 var BarDataSet = com.github.mikephil.charting.data.BarDataSet;
 var BarData = com.github.mikephil.charting.data.BarData;
@@ -668,9 +669,15 @@ export class CustomChartMarkerView extends com.github.mikephil.charting.componen
                     switch (this.displayData.fixedXValue.type) {
                         case "Int":
                             x = entry.getX().toFixed();
+                            x = formatNumber(parseInt(x), {
+                                fractionDigits: 0
+                            });
                             break;
                         case "Float":
                             x = entry.getX().toFixed(this.displayData.fixedXValue.numberOfDigits);
+                            x = formatNumber(parseInt(x), {
+                                fractionDigits: this.displayData.fixedXValue.numberOfDigits
+                            });
                             break;
                         default:
                             break;
@@ -678,15 +685,24 @@ export class CustomChartMarkerView extends com.github.mikephil.charting.componen
                 }
                 else {
                     x = entry.getX().toFixed();
+                    x = formatNumber(parseInt(x), {
+                        fractionDigits: 0
+                    });
                 }
 
                 if (this.displayData.fixedYValue) {
                     switch (this.displayData.fixedYValue.type) {
                         case "Int":
                             y = entry.getY().toFixed();
+                            y = formatNumber(parseInt(y), {
+                                fractionDigits: 0
+                            });
                             break;
                         case "Float":
                             y = entry.getY().toFixed(this.displayData.fixedYValue.numberOfDigits);
+                            y = formatNumber(parseFloat(y), {
+                                fractionDigits: this.displayData.fixedYValue.numberOfDigits
+                            });
                             break;
                         default:
                             break;
@@ -694,6 +710,9 @@ export class CustomChartMarkerView extends com.github.mikephil.charting.componen
                 }
                 else {
                     y = entry.getY().toFixed();
+                    y = formatNumber(parseInt(y), {
+                        fractionDigits: 0
+                    });
                 }
                 if (this.displayData.showXValue && indexX != -1) {
                     text = text.replace("{{x}}", x);
