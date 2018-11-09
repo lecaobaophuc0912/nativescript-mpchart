@@ -722,7 +722,7 @@ export class CustomChartMarkerView extends ChartMarkerView {
 
         this.label.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         this.label.numberOfLines = 0;
-        this.label.backgroundColor = UIColor.redColor;
+        this.label.backgroundColor = UIColor.clearColor;
         this.label.text = text;
         if (this.contentCenter) {
             this.label.center = CGPointMake(view.frame.size.width / 2, view.frame.size.height / 2);
