@@ -66,5 +66,8 @@
         "zone.js": "~0.8.4",
         "tslint": "~5.4.3"
     },
-    "bootstrapper": "nativescript-plugin-seed"
+    "bootstrapper": "nativescript-plugin-seed",
+    "dependencies": {
+        "simple-format-number": "^0.1.2"
+    }
 }

@@ -48,6 +48,7 @@ import {
 } from "../nativescript-mpchart.common";
 import { ChartMarkerConfig, ConfigDisplayData } from "../custom-marker-view/custom-marker-view.common";
 import { Color } from "tns-core-modules/color";
+import * as formatNumber from "simple-format-number";
 declare var UIEdgeInsetsMake: any;
 
 export class MPBarChart extends MPChartBase {
@@ -665,9 +666,15 @@ export class CustomChartMarkerView extends ChartMarkerView {
                 switch (this.displayData.fixedXValue.type) {
                     case "Int":
                         x = entry.x.toFixed();
+                        x = formatNumber(parseInt(x), {
+                            fractionDigits: 0
+                        });
                         break;
                     case "Float":
                         x = entry.x.toFixed(this.displayData.fixedXValue.numberOfDigits);
+                        x = formatNumber(parseFloat(x), {
+                            fractionDigits: this.displayData.fixedXValue.numberOfDigits
+                        });
                         break;
                     default:
                         break;
@@ -675,15 +682,24 @@ export class CustomChartMarkerView extends ChartMarkerView {
             }
             else {
                 x = entry.x.toFixed();
+                x = formatNumber(parseInt(x), {
+                    fractionDigits: 0
+                });
             }
 
             if (this.displayData.fixedYValue) {
                 switch (this.displayData.fixedYValue.type) {
                     case "Int":
                         y = entry.y.toFixed();
+                        y = formatNumber(parseInt(y), {
+                            fractionDigits: 0
+                        });
                         break;
                     case "Float":
                         y = entry.y.toFixed(this.displayData.fixedYValue.numberOfDigits);
+                        y = formatNumber(parseFloat(y), {
+                            fractionDigits: this.displayData.fixedXValue.numberOfDigits
+                        });
                         break;
                     default:
                         break;
@@ -691,14 +707,17 @@ export class CustomChartMarkerView extends ChartMarkerView {
             }
             else {
                 y = entry.y.toFixed();
+                y = formatNumber(parseInt(y), {
+                    fractionDigits: 0
+                });
             }
+
             if (this.displayData.showXValue && indexX != -1) {
                 text = text.replace("{{x}}", x);
             }
 
             if (this.displayData.showYValue && indexY != -1) {
                 text = text.replace("{{y}}", y);
-                console.log("text if", text);
             }
             this.nsStringLabel = NSString.alloc().initWithString(text);
         }
@@ -722,7 +741,7 @@ export class CustomChartMarkerView extends ChartMarkerView {
 
         this.label.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         this.label.numberOfLines = 0;
-        this.label.backgroundColor = UIColor.redColor;
+        this.label.backgroundColor = UIColor.clearColor;
         this.label.text = text;
         if (this.contentCenter) {
             this.label.center = CGPointMake(view.frame.size.width / 2, view.frame.size.height / 2);
