@@ -2,7 +2,7 @@
 A NativeScript MPChart for Android and iOS.
 This plugin still in develop and will update more type chart and feature in future.
 Because I don't have much time so it only have demo-ng is detail But it can work in core.
-Now, a plugin have simple LineChart.
+Now, a plugin have simple LineChart and BarChart.
 ### Based on
 [Charts](https://github.com/LeCaoPhuc/Charts) for iOS
 
