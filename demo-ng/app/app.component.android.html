@@ -2,7 +2,7 @@
     <Button text="onClick" (tap)="onTap($event)" background="violet"></Button>
     <Button text="setDefault" (tap)="onTapDefault($event)"></Button>
     <StackLayout height="500">
-        <MPLineChart *ngIf="dataSet" height="300" [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
+        <!-- <MPLineChart *ngIf="dataSet" height="300" [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
             [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset"
             [highlightPerTapEnabled]="setUp.highlightPerTapEnabled" [highlightPerDragEnabled]="setUp.highlightPerDragEnabled"
             [xAxisGranularity]="setUp.xAxisGranularityProperty" [yAxisGranularity]="setUp.yAxisGranularityProperty" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
@@ -12,9 +12,9 @@
             [xAxisMinValue]="setUp.xAxisMinValue" [leftAxisMinValue]="setUp.leftAxisMinValue" [rightAxisMinValue]="setUp.rightAxisMinValue"
             [xAxisMaxValue]="setUp.xAxisMaxValue" [leftAxi sMaxValue]="setUp.leftAxisMaxValue" [rightAxisMaxValue]="setUp.rightAxisMaxValue"
             [leftAxisFormatter]="leftAxisFormatter" [rightAxisFormatter]="rightAxisFormatter" [items]="dataSet" [labels]="labels"
-            [showValueLabels]="setUp.showValueLabels" #lineChart class="mp-chart"></MPLineChart>
+            [showValueLabels]="setUp.showValueLabels" #lineChart class="mp-chart"></MPLineChart> -->
     </StackLayout>
-    <!-- <StackLayout height="500">
+    <StackLayout height="500">
         <MPBarChart height="400" #lineChart *ngIf="barDataSet" [items]="barDataSet" [labels]="labels" [showLegend]="setUp.showLegend"
             [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable" [descriptionText]="setUp.descriptionText"
             [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset" [descriptionTextColor]="setUp.descriptionTextColor"
@@ -25,5 +25,5 @@
             [leftAxisMaxValue]="setUp.leftAxisMaxValue" [rightAxisMaxValue]="setUp.rightAxisMaxValue" [xAxisLabelPosition]="setUp.xAxisLabelPosition"
             [leftAxisFormatter]="leftAxisFormatter" [rightAxisFormatter]="rightAxisFormatter" [showLeftAxis]="setUp.showLeftAxis"
             [showRightAxis]="setUp.showRightAxis" [marker]="markerConfig" class="mp-chart"></MPBarChart>
-    </StackLayout> -->
+    </StackLayout>
 </StackLayout>

@@ -1,0 +1,1 @@
+[{"__symbolic":"module","version":4,"metadata":{"MPLineChart":{"__symbolic":"class","extends":{"__symbolic":"reference","module":"../nativescript-mpchart.common","name":"MPChartBase","line":1,"character":41},"members":{"createNativeView":[{"__symbolic":"method"}],"resetZoomLineChart":[{"__symbolic":"method"}]}}}}]

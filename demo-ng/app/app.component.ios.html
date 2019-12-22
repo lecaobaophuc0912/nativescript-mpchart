@@ -1,9 +1,9 @@
 <StackLayout>
-    <Button text="onClick" (tap)="onTap($event)"></Button>
-    <Button text="setDefault" (tap)="onTapDefault($event)"></Button>
-    <Button text="onTap" (tap)="onTapTest()"></Button>
+  <button text="onClick" (tap)="onTap($event)"></button>
+  <button text="setDefault" (tap)="onTapDefault($event)"></button>
+  <button text="onTap" (tap)="onTapTest()"></button>
 
-    <!-- <StackLayout height="500">
+  <!-- <StackLayout height="500">
         <MPLineChart *ngIf="dataSet" #lineChart [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines" [scaleEnable]="setUp.scaleEnable"
             [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset" [descriptionYOffset]="setUp.descriptionYOffset"
             [descriptionTextColor]="setUp.descriptionTextColor" [highlightPerTapEnabled]="setUp.highlightPerTapEnabled" [highlightPerDragEnabled]="setUp.highlightPerDragEnabled"
@@ -16,17 +16,15 @@
             [font]="setUp.font" [showValueLabels]="setUp.showValueLabels" [showLeftAxis]="setUp.showLeftAxis" [showRightAxis]="setUp.showRightAxis" class="mp-chart"></MPLineChart>
     </StackLayout> -->
 
-    <StackLayout height="500">
-        <MPBarChart #lineChart *ngIf="barDataSet" [items]="barDataSet" [labels]="labels" [showLegend]="setUp.showLegend" [showGridLines]="setUp.showGridLines"
-            [scaleEnable]="setUp.scaleEnable" [descriptionText]="setUp.descriptionText" [descriptionXOffset]="setUp.descriptionXOffset"
-            [descriptionYOffset]="setUp.descriptionYOffset" [xAxisGranularity]="setUp.xAxisGranularityProperty" [leftAxisGranularity]="setUp.leftAxisGranularityProperty"
-            [rightAxisGranularity]="setUp.rightAxisGranularityProperty" [xAxisLineColor]="setUp.xAxisLineColor" [leftAxisLineColor]="setUp.leftAxisLineColor"
-            [rightAxisLineColor]="setUp.rightAxisLineColor" [xAxisTextColor]="setUp.xAxisTextColor" [leftAxisTextColor]="setUp.leftAxisTextColor"
-            [font]="setUp.font" [showValueLabels]="setUp.showValueLabels" [showLeftAxis]="setUp.showLeftAxis" [showRightAxis]="setUp.showRightAxis"
+  <StackLayout width="300" height="500">
+        <MPBarChart #lineChart *ngIf="barDataSet" [items]="barDataSet" 
             [marker]="markerConfig" class="mp-chart"></MPBarChart>
     </StackLayout>
-
-    <StackLayout #view width="100" height="50" backgroundColor="red">
-        <Label color="red" background="" text="Text" textWrap="true"></Label>
-    </StackLayout>
-    <!-- showValueLabels -->
+  <!-- <StackLayout height="500">
+    <Placeholder #chart height="500" (creatingView)="creatingView($event)" ></Placeholder>
+  </StackLayout> -->
+  <StackLayout #view width="100" height="50" backgroundColor="red">
+    <label color="red" background="" text="Text" textWrap="true"></label>
+  </StackLayout>
+  <!-- showValueLabels -->
+</StackLayout>

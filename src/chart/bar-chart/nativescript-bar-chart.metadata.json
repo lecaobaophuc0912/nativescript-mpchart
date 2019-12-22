@@ -1,0 +1,1 @@
+[{"__symbolic":"module","version":4,"metadata":{"MPBarChart":{"__symbolic":"class","extends":{"__symbolic":"reference","module":"../nativescript-mpchart.common","name":"MPChartBase","line":1,"character":40},"members":{"createNativeView":[{"__symbolic":"method"}]}}}}]

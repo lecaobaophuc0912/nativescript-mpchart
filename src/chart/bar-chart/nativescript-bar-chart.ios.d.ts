@@ -1,7 +1,7 @@
 import { MPChartBase } from "../nativescript-mpchart.common";
 import { ChartMarkerConfig, ConfigDisplayData } from "../custom-marker-view/custom-marker-view.common";
 export declare class MPBarChart extends MPChartBase {
-    nativeView: BarChartView;
+    nativeView: any;
     private showValueLabels;
     createNativeView(): BarChartView;
     onLoaded(): void;

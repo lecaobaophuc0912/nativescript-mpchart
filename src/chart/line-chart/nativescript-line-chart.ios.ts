@@ -97,9 +97,9 @@ export class MPLineChart extends MPChartBase {
                     let entrie = ChartDataEntry.new().initWithXY(items[i].dataSet[j].x, items[i].dataSet[j].y);
                     entries.addObject(entrie);
                 }
-                let dataset: LineChartDataSet = LineChartDataSet.new().initWithValuesLabel(entries, labelLegend);
-                dataset.lineColor = items[i].lineColor.ios;
-                dataset.setLineColor();
+                let dataset: any = LineChartDataSet.new().initWithEntriesLabel(entries, labelLegend);
+                // dataset.color = items[i].lineColor.ios;
+                // dataset.setLineColor();
                 dataset.drawCircleHoleEnabled = items[i].circleHoleEnabled ? !!items[i].circleHoleEnabled : false;
                 let colorCircle: NSMutableArray<any> = NSMutableArray.new();
                 if (items[i].circleColor) {
@@ -124,8 +124,8 @@ export class MPLineChart extends MPChartBase {
                 throw new Error("items number " + i + "do not have any item");
             }
         }
-        this.nativeView.lineChartData = lineChartData;
-        this.nativeView.setData();
+        // this.nativeView.data = lineChartData;
+        // this.nativeView.setData();
     }
 
     public [labelsProperty.setNative](labels: Array<DataSetLabelInterface>) {

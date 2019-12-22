@@ -1846,6 +1846,8 @@ declare class ChartDataSet extends ChartBaseDataSet {
 	initWithValues(values: NSArray<ChartDataEntry>): this;
 
 	initWithValuesLabel(values: NSArray<ChartDataEntry>, label: string): this;
+
+	initWithEntriesLabel(entries: NSArray<ChartLegendEntry>, label: string): this;
 }
 
 declare const enum ChartDataSetRounding {

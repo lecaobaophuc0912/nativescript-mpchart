@@ -52,30 +52,74 @@ import * as formatNumber from "simple-format-number";
 declare var UIEdgeInsetsMake: any;
 
 export class MPBarChart extends MPChartBase {
-    nativeView: BarChartView;
+    nativeView: any;
     private showValueLabels: boolean;
     public createNativeView() {
+        console.log('createNativeView')
         let barChartView = BarChartView.new();
         // set some default value of chart when init view
-        let description: ChartDescription = ChartDescription.new();
-        description.text = "";
-        barChartView.chartDescription = description;
-        barChartView.xAxis.labelPosition = XAxisLabelPosition.Bottom;
-        barChartView.xAxis.drawGridLinesEnabled = false;
-        barChartView.leftAxis.drawGridLinesEnabled = false;
-        barChartView.rightAxis.drawGridLinesEnabled = false;
-        barChartView.leftAxis.enabled = true;
-        barChartView.rightAxis.enabled = true;
-        // barChartView.highlightPerDragEnabled = false;
-        // barChartView.highlightPerTapEnabled = false;
+        // let description: ChartDescription = ChartDescription.new();
+        // description.text = "";
+        // barChartView.chartDescription = description;
+        // barChartView.xAxis.labelPosition = XAxisLabelPosition.Bottom;
+        // barChartView.xAxis.drawGridLinesEnabled = false;
+        // barChartView.leftAxis.drawGridLinesEnabled = false;
+        // barChartView.rightAxis.drawGridLinesEnabled = false;
+        // barChartView.leftAxis.enabled = true;
+        // barChartView.rightAxis.enabled = true;
+        // // barChartView.highlightPerDragEnabled = false;
+        // // barChartView.highlightPerTapEnabled = false;
 
-        barChartView.xAxis.granularity = 1;
-        barChartView.xAxis.axisMinimum = 0;
-        barChartView.leftAxis.axisMinimum = 0;
-        barChartView.rightAxis.axisMinimum = 0;
-        barChartView.doubleTapToZoomEnabled = false;
-        barChartView.fitBars = true;
-        barChartView.setScaleEnabled(false);
+        // barChartView.xAxis.granularity = 1;
+        // barChartView.xAxis.axisMinimum = 0;
+        // barChartView.leftAxis.axisMinimum = 0;
+        // barChartView.rightAxis.axisMinimum = 0;
+        // barChartView.doubleTapToZoomEnabled = false;
+        // barChartView.fitBars = true;
+        // barChartView.setScaleEnabled(false);
+        // return barChartView;
+        // let barChartView: any = BarChartView.new();
+        let barDataSet = []
+        let barChartData: BarChartData = BarChartData.new(); 
+        let arrDataView1: Array<DataSetChartInterface> = [];
+        let arrDataView2: Array<DataSetChartInterface> = [];
+        for (let i = 0; i < 8; i++) {
+            arrDataView1.push({
+                x: i,
+                y: i * 7,
+            });
+            arrDataView2.push({
+                x: i,
+                y: i * 9,
+            });
+        }
+        let color = new Color("#00FFff");
+        let color1 = new Color("#FF0000");
+        barDataSet.push({
+            dataSet: arrDataView1,
+            legendLabel: "barChartView1",
+            highlighColor: color,
+            barColor: color1,
+        });
+        for(let i =0; i < barDataSet.length; i++) {
+            let entries: NSMutableArray<any> = NSMutableArray.new();
+            for (let j = 0; j < barDataSet[i].dataSet.length; j++) {
+                let entrie = BarChartDataEntry.alloc().initWithXY(barDataSet[i].dataSet[j].x, barDataSet[i].dataSet[j].y);
+    
+                entries.addObject(entrie);
+            }
+            let dataset: BarChartDataSet = BarChartDataSet.new().initWithEntriesLabel(entries, barDataSet[i].legendLabel);
+            dataset.setColor(color.ios);
+            if (barDataSet[i].highlighColor) {
+                dataset.highlightColor = barDataSet[i].highlighColor.ios;
+            }
+            dataset.highlightEnabled = true;
+            
+            dataset.drawValuesEnabled = true;
+            barChartData.addDataSet(dataset)
+        }
+        barChartView.barChartData = barChartData;
+        barChartView.setData();
         return barChartView;
     }
 
@@ -90,17 +134,18 @@ export class MPBarChart extends MPChartBase {
     }
 
     public [itemsProperty.setNative](items: Array<DataBarChartInterface>) {
-        let barChartData = BarChartData.new();
+        console.log('items', items);
+        let dataset: BarChartDataSet;
         for (let i = 0; i < items.length; i++) {
             if (items[i].dataSet && items[i].dataSet.length) {
                 let labelLegend = items[i].legendLabel ? items[i].legendLabel : "";
                 let entries: NSMutableArray<any> = NSMutableArray.new();
                 for (let j = 0; j < items[i].dataSet.length; j++) {
-                    let entrie = BarChartDataEntry.new().initWithXY(items[i].dataSet[j].x, items[i].dataSet[j].y);
+                    let entrie = BarChartDataEntry.alloc().initWithXY(items[i].dataSet[j].x, items[i].dataSet[j].y);
 
                     entries.addObject(entrie);
                 }
-                let dataset: BarChartDataSet = BarChartDataSet.alloc().initWithValuesLabel(entries, labelLegend);
+                let dataset: any = BarChartDataSet.alloc().initWithEntriesLabel(entries, labelLegend);
                 dataset.setColor(items[i].barColor.ios);
                 if (items[i].highlighColor) {
                     dataset.highlightColor = items[i].highlighColor.ios;
@@ -112,12 +157,12 @@ export class MPBarChart extends MPChartBase {
                 else {
                     dataset.drawValuesEnabled = true;
                 }
-                barChartData.addDataSet(dataset);
             }
             else {
                 throw new Error("items number " + i + "do not have any item");
             }
         }
+        let barChartData = BarChartData.alloc().initWithDataSet(dataset);
         this.nativeView.barChartData = barChartData;
         this.nativeView.setData();
     }

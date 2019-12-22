@@ -1,0 +1,27 @@
+// Add your native dependencies here:
+allprojects {
+    repositories {
+        jcenter()
+        google()
+        maven { url "https://jitpack.io" }
+        maven { url "https://maven.google.com" }
+        
+
+    }
+}
+// Uncomment to add recyclerview-v7 dependency
+dependencies {
+	
+}
+
+
+android {  
+  defaultConfig {  
+    generatedDensities = []
+    applicationId = "org.nativescript.demong"  
+  }
+  aaptOptions {  
+    additionalParameters "--no-version-vectors"  
+  }  
+} 
+

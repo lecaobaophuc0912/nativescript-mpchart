@@ -1,1 +1,1 @@
-[{"__symbolic":"module","version":4,"metadata":{},"exports":[{"from":"./nativescript-mpchart.common"},{"from":"./line-chart/nativescript-line-chart"}]}]
+[{"__symbolic":"module","version":4,"metadata":{},"exports":[{"from":"./nativescript-mpchart.common"},{"from":"./line-chart/nativescript-line-chart"},{"from":"./bar-chart/nativescript-bar-chart"},{"from":"./custom-marker-view/custom-marker-view.common"}]}]
